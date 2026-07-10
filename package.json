@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Dar Al Muneerah — International Islamic University Islamabad. Bilingual (AR/EN) Islamic education platform with registration, instructor applications, and an analytics admin dashboard.",
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
