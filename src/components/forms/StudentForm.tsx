@@ -61,7 +61,7 @@ export function StudentForm() {
   const isTajweed = COURSES.find((c) => c.key === course)?.leveled;
 
   const stepFields: (keyof StudentInput)[][] = [
-    ["fullName", "email", "phone", "fatherPhone", "nationality", "nationalId", "registrationNo", "universityId"],
+    ["fullName", "email", "phone", "fatherPhone", "nationality", "nationalId", "registrationNo"],
     ["department", "specialization", "academicLevel"],
     ["course", "courseLevel", "studiedBefore", "completedLevel", "instituteName"],
     [],
@@ -145,9 +145,6 @@ export function StudentForm() {
             <Field label={d.form.registrationNo} required error={errors.registrationNo?.message}>
               <Input {...register("registrationNo")} />
             </Field>
-            <Field label={d.form.universityId} error={errors.universityId?.message}>
-              <Input {...register("universityId")} />
-            </Field>
           </div>
         )}
 
@@ -226,7 +223,7 @@ export function StudentForm() {
                     }))}
                   />
                 </Field>
-                <Field label={d.form.instituteName} error={errors.instituteName?.message}>
+                <Field label={d.form.studentInstitute} error={errors.instituteName?.message}>
                   <Input {...register("instituteName")} />
                 </Field>
               </>
@@ -236,27 +233,12 @@ export function StudentForm() {
 
         {/* Step 4 — Documents */}
         {step === 3 && (
-          <div className="grid gap-5 sm:grid-cols-2">
+          <div className="grid gap-5">
             <FileUpload
               label={d.form.uploadUniId}
               required
               value={files[d.form.uploadUniId] || null}
               onChange={setFile(d.form.uploadUniId)}
-            />
-            <FileUpload
-              label={d.form.uploadNationalId}
-              value={files[d.form.uploadNationalId] || null}
-              onChange={setFile(d.form.uploadNationalId)}
-            />
-            <FileUpload
-              label={d.form.uploadPhoto}
-              value={files[d.form.uploadPhoto] || null}
-              onChange={setFile(d.form.uploadPhoto)}
-            />
-            <FileUpload
-              label={d.form.uploadCert}
-              value={files[d.form.uploadCert] || null}
-              onChange={setFile(d.form.uploadCert)}
             />
           </div>
         )}

@@ -32,16 +32,24 @@ export const COURSES = [
 export const COURSE_KEYS = COURSES.map((c) => c.key);
 
 export const TAJWEED_LEVELS = [
-  { key: "beginner", en: "Beginner", ar: "مبتدئ" },
-  { key: "intermediate", en: "Intermediate", ar: "متوسط" },
-  { key: "advanced", en: "Advanced", ar: "متقدم" },
+  { key: "basic", en: "Basic", ar: "المبتدئ" },
+  { key: "intermediate", en: "Intermediate", ar: "المتوسط" },
+  { key: "advanced", en: "Advance", ar: "المتقدم" },
 ] as const;
 
+// Student — "If yes, how many levels have you completed?"
 export const COMPLETED_LEVELS = [
-  { key: "not-studied", en: "Not Studied", ar: "لم تُدرَس" },
-  { key: "beginner", en: "Beginner", ar: "مبتدئ" },
-  { key: "intermediate", en: "Intermediate", ar: "متوسط" },
-  { key: "advanced", en: "Advanced", ar: "متقدم" },
+  { key: "not-studied", en: "I have not studied this course before.", ar: "لم أدرس" },
+  { key: "basic", en: "Basic level", ar: "المبتدئ" },
+  { key: "intermediate", en: "Intermediate level", ar: "المتوسط" },
+  { key: "advanced", en: "Advance level", ar: "المتقدم" },
+] as const;
+
+// Instructor — "If yes, what is the highest level you have taught?"
+export const TAUGHT_LEVELS = [
+  { key: "beginner", en: "Beginner", ar: "المبتدئ" },
+  { key: "intermediate", en: "Intermediate", ar: "المتوسط" },
+  { key: "advanced", en: "Advanced", ar: "المتقدم" },
 ] as const;
 
 // Instructors teach a narrower course set per the blueprint.
@@ -74,17 +82,18 @@ export const ACADEMIC_LEVELS = [
   { key: "other", en: "Other", ar: "أخرى" },
 ] as const;
 
-// Teachers (from the brief) — used for the public Teachers section.
+// Teachers — ONLY the names provided in the brief. Shown in English (romanised)
+// in English mode and in Arabic in Arabic mode. No other details are invented.
 export const TEACHERS = [
-  { name: "إرم ناز", spec: { en: "Tajweed & Qira'at", ar: "التجويد والقراءات" }, courses: ["tajweed"], years: 6 },
-  { name: "سلمة بي بي", spec: { en: "Hifz ul Qur'an", ar: "حفظ القرآن" }, courses: ["hifz-quran"], years: 8 },
-  { name: "نمرة سلطانة", spec: { en: "Aqeedah", ar: "العقيدة" }, courses: ["aqeedah"], years: 5 },
-  { name: "سكينة", spec: { en: "Understanding Qur'an", ar: "فهم القرآن" }, courses: ["understanding-quran"], years: 4 },
-  { name: "فضة", spec: { en: "Hifz ul Ahadees", ar: "حفظ الأحاديث" }, courses: ["hifz-ahadees"], years: 7 },
-  { name: "أم أيمن", spec: { en: "Hifz Mutun", ar: "حفظ المتون" }, courses: ["hifz-mutun"], years: 5 },
-  { name: "كنز الإيمان", spec: { en: "Explanation of Mutun", ar: "شرح المتون" }, courses: ["sharh-mutun"], years: 6 },
-  { name: "هاجر", spec: { en: "Tajweed (Advanced)", ar: "التجويد المتقدم" }, courses: ["tajweed"], years: 9 },
-  { name: "أنعم زيدي", spec: { en: "Hifz ul Qur'an", ar: "حفظ القرآن" }, courses: ["hifz-quran"], years: 10 },
+  { en: "Iram Naz", ar: "إرم ناز" },
+  { en: "Salma Bibi", ar: "سلمة بي بي" },
+  { en: "Namira Sultana", ar: "نمرة سلطانة" },
+  { en: "Sakina", ar: "سكينة" },
+  { en: "Fizza", ar: "فضة" },
+  { en: "Umm Ayman", ar: "أم أيمن" },
+  { en: "Kanz ul Iman", ar: "كنز الإيمان" },
+  { en: "Hajar", ar: "هاجر" },
+  { en: "Anam Zaidi", ar: "أنعم زيدي" },
 ] as const;
 
 // Upload constraints

@@ -74,8 +74,12 @@ export function Footer() {
             {d.footer.social}
           </h4>
           <ul className="space-y-2 text-sm text-white/70">
-            <li>{process.env.NEXT_PUBLIC_CONTACT_PHONE}</li>
-            <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
+            {process.env.NEXT_PUBLIC_CONTACT_PHONE && (
+              <li>{process.env.NEXT_PUBLIC_CONTACT_PHONE}</li>
+            )}
+            {process.env.NEXT_PUBLIC_CONTACT_EMAIL && (
+              <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
+            )}
             <li>{d.contact.addressValue}</li>
           </ul>
           <Link

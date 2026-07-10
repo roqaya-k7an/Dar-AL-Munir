@@ -36,7 +36,7 @@ export function Contact() {
     { icon: Phone, label: d.contact.phone, value: process.env.NEXT_PUBLIC_CONTACT_PHONE },
     { icon: Mail, label: d.contact.email, value: process.env.NEXT_PUBLIC_CONTACT_EMAIL },
     { icon: MapPin, label: d.contact.address, value: d.contact.addressValue },
-  ];
+  ].filter((it) => it.value && it.value.trim().length > 0);
 
   return (
     <section id="contact" className="container-x scroll-mt-24 py-20">

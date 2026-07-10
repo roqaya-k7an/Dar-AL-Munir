@@ -36,8 +36,8 @@ const config: Config = {
       fontFamily: {
         display: ["var(--font-marcellus)", "Marcellus", "serif"],
         sans: ["var(--font-manrope)", "Manrope", "system-ui", "sans-serif"],
-        arabic: ["var(--font-amiri)", "Amiri", "serif"],
-        kufi: ["var(--font-reem)", "Reem Kufi", "sans-serif"],
+        arabic: ["var(--font-arabic)", "Noto Sans Arabic", "sans-serif"],
+        kufi: ["var(--font-arabic)", "Noto Sans Arabic", "sans-serif"],
       },
       borderRadius: {
         xl: "1rem",
