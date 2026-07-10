@@ -1,0 +1,346 @@
+"use client";
+
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+import { CheckCircle2, ArrowLeft, ArrowRight, Send } from "lucide-react";
+import { useLang } from "@/lib/i18n/provider";
+import { Stepper } from "@/components/ui/Stepper";
+import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
+import { FileUpload } from "@/components/ui/FileUpload";
+import { instructorSchema, type InstructorInput } from "@/lib/validations";
+import {
+  INSTRUCTOR_COURSES,
+  TAJWEED_LEVELS,
+  ACADEMIC_LEVELS,
+  EXPERIENCE_YEARS,
+  TEACHING_MODES,
+} from "@/lib/constants";
+
+type FilesState = Record<string, File | null>;
+
+export function InstructorForm() {
+  const { d, lang, dir } = useLang();
+  const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
+  const BackArrow = dir === "rtl" ? ArrowRight : ArrowLeft;
+
+  const [step, setStep] = useState(0);
+  const [files, setFiles] = useState<FilesState>({});
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const [done, setDone] = useState(false);
+
+  const steps = [
+    d.form.personal,
+    d.form.academic,
+    d.form.teachingInfo,
+    d.form.documents,
+    d.form.review,
+  ];
+
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    watch,
+    setValue,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<InstructorInput>({
+    resolver: zodResolver(instructorSchema),
+    defaultValues: { taughtBefore: false } as any,
+    mode: "onTouched",
+  });
+
+  const course = watch("course");
+  const taughtBefore = watch("taughtBefore");
+  const isTajweed = INSTRUCTOR_COURSES.find((c) => c.key === course)?.leveled;
+
+  const stepFields: (keyof InstructorInput)[][] = [
+    ["fullName", "email", "phone", "nationality", "nationalId", "employeeNo", "universityId"],
+    ["department", "specialization", "academicLevel"],
+    ["course", "courseLevel", "taughtBefore", "highestLevelTaught", "instituteName", "experienceYears", "teachingMode"],
+    [],
+    [],
+  ];
+
+  async function next() {
+    const valid = await trigger(stepFields[step] as any);
+    if (valid) setStep((s) => Math.min(s + 1, steps.length - 1));
+  }
+
+  async function onSubmit(values: InstructorInput) {
+    setSubmitError(null);
+    const fd = new FormData();
+    fd.append("payload", JSON.stringify(values));
+    Object.entries(files).forEach(([label, file]) => {
+      if (file) fd.append(`file:${label}`, file);
+    });
+    const res = await fetch("/api/register/instructor", {
+      method: "POST",
+      body: fd,
+    });
+    if (res.ok) {
+      setDone(true);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      return;
+    }
+    if (res.status === 409) setSubmitError(d.form.duplicate);
+    else setSubmitError(d.form.error);
+  }
+
+  if (done) {
+    return (
+      <div className="glass mx-auto max-w-xl rounded-3xl p-10 text-center">
+        <CheckCircle2 className="mx-auto h-16 w-16 text-leaf" />
+        <h2 className="mt-5 font-display text-3xl text-emerald-deep">
+          {d.instructor.title}
+        </h2>
+        <p className="mt-3 text-brand-muted">{d.form.successInstructor}</p>
+        <Link href="/" className="btn-primary mt-7">
+          {d.nav.home}
+        </Link>
+      </div>
+    );
+  }
+
+  const setFile = (label: string) => (f: File | null) =>
+    setFiles((prev) => ({ ...prev, [label]: f }));
+
+  return (
+    <div className="glass rounded-3xl p-6 sm:p-9">
+      <Stepper steps={steps} current={step} />
+      <p className="mt-4 text-sm text-brand-muted">
+        {d.form.step} {step + 1} {d.form.of} {steps.length}
+      </p>
+
+      <form onSubmit={handleSubmit(onSubmit)} className="mt-6">
+        {step === 0 && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label={d.form.fullName} required error={errors.fullName?.message}>
+              <Input {...register("fullName")} />
+            </Field>
+            <Field label={d.form.emailAddress} required error={errors.email?.message}>
+              <Input type="email" {...register("email")} />
+            </Field>
+            <Field label={d.form.phoneNumber} required error={errors.phone?.message}>
+              <Input {...register("phone")} placeholder="+92 3xx xxxxxxx" />
+            </Field>
+            <Field label={d.form.nationality} required error={errors.nationality?.message}>
+              <Input {...register("nationality")} />
+            </Field>
+            <Field label={d.form.nationalId} required error={errors.nationalId?.message}>
+              <Input {...register("nationalId")} />
+            </Field>
+            <Field label={d.form.employeeNo} required error={errors.employeeNo?.message}>
+              <Input {...register("employeeNo")} />
+            </Field>
+            <Field label={d.form.universityId} error={errors.universityId?.message}>
+              <Input {...register("universityId")} />
+            </Field>
+          </div>
+        )}
+
+        {step === 1 && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label={d.form.department} error={errors.department?.message}>
+              <Input {...register("department")} />
+            </Field>
+            <Field label={d.form.specialization} error={errors.specialization?.message}>
+              <Input {...register("specialization")} />
+            </Field>
+            <Field label={d.form.academicLevel} error={errors.academicLevel?.message}>
+              <Select {...register("academicLevel")}>
+                <option value="">{d.form.select}</option>
+                {ACADEMIC_LEVELS.map((a) => (
+                  <option key={a.key} value={a.key}>
+                    {lang === "ar" ? a.ar : a.en}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+          </div>
+        )}
+
+        {step === 2 && (
+          <div className="grid gap-5">
+            <Field label={d.form.selectCourseTeach} required error={errors.course?.message}>
+              <Select {...register("course")}>
+                <option value="">{d.form.select}</option>
+                {INSTRUCTOR_COURSES.map((c) => (
+                  <option key={c.key} value={c.key}>
+                    {lang === "ar" ? c.ar : c.en}
+                  </option>
+                ))}
+              </Select>
+            </Field>
+
+            {isTajweed && (
+              <Field label={d.form.level} error={errors.courseLevel?.message}>
+                <RadioPills
+                  name="courseLevel"
+                  value={watch("courseLevel") || ""}
+                  onChange={(v) => setValue("courseLevel", v)}
+                  options={TAJWEED_LEVELS.map((l) => ({
+                    value: l.key,
+                    label: lang === "ar" ? l.ar : l.en,
+                  }))}
+                />
+              </Field>
+            )}
+
+            <Field label={d.form.taughtBefore}>
+              <RadioPills
+                name="taughtBefore"
+                value={taughtBefore ? "yes" : "no"}
+                onChange={(v) => setValue("taughtBefore", v === "yes")}
+                options={[
+                  { value: "yes", label: d.form.yes },
+                  { value: "no", label: d.form.no },
+                ]}
+              />
+            </Field>
+
+            {taughtBefore && (
+              <div className="grid gap-5 sm:grid-cols-2">
+                <Field label={d.form.highestLevel} error={errors.highestLevelTaught?.message}>
+                  <Input {...register("highestLevelTaught")} />
+                </Field>
+                <Field label={d.form.instituteName} error={errors.instituteName?.message}>
+                  <Input {...register("instituteName")} />
+                </Field>
+              </div>
+            )}
+
+            <div className="grid gap-5 sm:grid-cols-2">
+              <Field label={d.form.experience} required error={errors.experienceYears?.message}>
+                <Select {...register("experienceYears")}>
+                  <option value="">{d.form.select}</option>
+                  {EXPERIENCE_YEARS.map((e) => (
+                    <option key={e.key} value={e.key}>
+                      {lang === "ar" ? e.ar : e.en}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label={d.form.teachingMode} required error={errors.teachingMode?.message}>
+                <RadioPills
+                  name="teachingMode"
+                  value={watch("teachingMode") || ""}
+                  onChange={(v) => setValue("teachingMode", v)}
+                  options={TEACHING_MODES.map((m) => ({
+                    value: m.key,
+                    label: lang === "ar" ? m.ar : m.en,
+                  }))}
+                />
+              </Field>
+            </div>
+          </div>
+        )}
+
+        {step === 3 && (
+          <div className="grid gap-5 sm:grid-cols-2">
+            <FileUpload
+              label={d.form.uploadCv}
+              required
+              value={files[d.form.uploadCv] || null}
+              onChange={setFile(d.form.uploadCv)}
+            />
+            <FileUpload
+              label={d.form.uploadUniId}
+              value={files[d.form.uploadUniId] || null}
+              onChange={setFile(d.form.uploadUniId)}
+            />
+            <FileUpload
+              label={d.form.uploadEmployeeId}
+              value={files[d.form.uploadEmployeeId] || null}
+              onChange={setFile(d.form.uploadEmployeeId)}
+            />
+            <FileUpload
+              label={d.form.uploadNationalId}
+              value={files[d.form.uploadNationalId] || null}
+              onChange={setFile(d.form.uploadNationalId)}
+            />
+            <FileUpload
+              label={d.form.uploadPhoto}
+              value={files[d.form.uploadPhoto] || null}
+              onChange={setFile(d.form.uploadPhoto)}
+            />
+            <FileUpload
+              label={d.form.uploadTeachingCert}
+              value={files[d.form.uploadTeachingCert] || null}
+              onChange={setFile(d.form.uploadTeachingCert)}
+            />
+            <FileUpload
+              label={d.form.uploadExpCert}
+              value={files[d.form.uploadExpCert] || null}
+              onChange={setFile(d.form.uploadExpCert)}
+            />
+          </div>
+        )}
+
+        {step === 4 && (
+          <div>
+            <p className="mb-4 text-sm text-brand-muted">{d.form.reviewNote}</p>
+            <div className="grid gap-2 rounded-2xl border border-emerald/10 bg-white/60 p-5 sm:grid-cols-2">
+              {(
+                [
+                  [d.form.fullName, getValues("fullName")],
+                  [d.form.emailAddress, getValues("email")],
+                  [d.form.phoneNumber, getValues("phone")],
+                  [d.form.nationality, getValues("nationality")],
+                  [d.form.employeeNo, getValues("employeeNo")],
+                  [
+                    d.form.selectCourseTeach,
+                    INSTRUCTOR_COURSES.find((c) => c.key === getValues("course"))?.[lang],
+                  ],
+                  [
+                    d.form.experience,
+                    EXPERIENCE_YEARS.find((e) => e.key === getValues("experienceYears"))?.[lang],
+                  ],
+                ] as [string, string | undefined][]
+              ).map(([k, v]) => (
+                <div key={k} className="flex justify-between gap-3 border-b border-emerald/5 py-1.5 text-sm">
+                  <span className="text-brand-muted">{k}</span>
+                  <span className="font-medium text-emerald-deep">{v || "—"}</span>
+                </div>
+              ))}
+            </div>
+            {submitError && (
+              <p className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+                {submitError}
+              </p>
+            )}
+          </div>
+        )}
+
+        <div className="mt-8 flex items-center justify-between">
+          <button
+            type="button"
+            onClick={() => setStep((s) => Math.max(0, s - 1))}
+            disabled={step === 0}
+            className="btn-ghost disabled:invisible"
+          >
+            <BackArrow className="h-4 w-4" />
+            {d.form.back}
+          </button>
+          {step < steps.length - 1 ? (
+            <button type="button" onClick={next} className="btn-primary">
+              {d.form.next}
+              <Arrow className="h-4 w-4" />
+            </button>
+          ) : (
+            <button
+              type="submit"
+              disabled={isSubmitting || !files[d.form.uploadCv]}
+              className="btn-accent"
+            >
+              <Send className="h-4 w-4" />
+              {isSubmitting ? d.form.submitting : d.form.submit}
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  );
+}
