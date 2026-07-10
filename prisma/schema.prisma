@@ -1,0 +1,144 @@
+// Dar Al Muneerah — Prisma schema
+// Default provider is SQLite for zero-config local development.
+// For production, switch `provider` to "postgresql" (Supabase / Postgres)
+// and update DATABASE_URL. The models are portable across both.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// NOTE: SQLite (dev default) does not support Prisma enums, so status is a
+// String constrained in the application layer (see src/lib/constants.ts).
+// On PostgreSQL/Supabase you may promote these to native enums.
+// Allowed status values: PENDING | APPROVED | REJECTED | ARCHIVED
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("admin")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model StudentApplication {
+  id                String            @id @default(cuid())
+  // Personal
+  fullName          String
+  email             String
+  phone             String
+  fatherPhone       String?
+  nationality       String
+  nationalId        String
+  registrationNo    String
+  universityId      String?
+  // Academic
+  department        String?
+  specialization    String?
+  academicLevel     String?
+  // Course
+  course            String
+  courseLevel       String?
+  studiedBefore     Boolean           @default(false)
+  completedLevel    String?
+  instituteName     String?
+  // Meta
+  status            String            @default("PENDING")
+  notes             String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  files             UploadedFile[]
+
+  @@index([status])
+  @@index([course])
+  @@index([nationality])
+  @@index([createdAt])
+}
+
+model InstructorApplication {
+  id                String            @id @default(cuid())
+  // Personal
+  fullName          String
+  email             String
+  phone             String
+  nationality       String
+  nationalId        String
+  employeeNo        String
+  universityId      String?
+  department        String?
+  specialization    String?
+  academicLevel     String?
+  // Teaching
+  course            String
+  courseLevel       String?
+  taughtBefore      Boolean           @default(false)
+  highestLevelTaught String?
+  instituteName     String?
+  experienceYears   String?
+  teachingMode      String?
+  // Meta
+  status            String            @default("PENDING")
+  notes             String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  files             UploadedFile[]
+
+  @@index([status])
+  @@index([course])
+  @@index([nationality])
+  @@index([createdAt])
+}
+
+model UploadedFile {
+  id            String   @id @default(cuid())
+  label         String   // e.g. "University ID Card", "CV / Resume"
+  originalName  String
+  storedName    String   // filename on disk (or storage key)
+  mimeType      String
+  size          Int
+  createdAt     DateTime @default(now())
+
+  studentId     String?
+  student       StudentApplication?    @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  instructorId  String?
+  instructor    InstructorApplication? @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+
+  @@index([studentId])
+  @@index([instructorId])
+}
+
+model Announcement {
+  id        String   @id @default(cuid())
+  titleEn   String
+  titleAr   String
+  bodyEn    String
+  bodyAr    String
+  category  String   @default("news") // news | course | event | deadline | notice
+  pinned    Boolean  @default(false)
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([published])
+  @@index([createdAt])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  handled   Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([handled])
+}
