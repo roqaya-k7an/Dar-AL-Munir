@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Marcellus, Manrope, Amiri, Reem_Kufi } from "next/font/google";
+import { Marcellus, Manrope, Noto_Sans_Arabic } from "next/font/google";
 import "./globals.css";
 import { LanguageProvider } from "@/lib/i18n/provider";
 
@@ -15,16 +15,11 @@ const manrope = Manrope({
   variable: "--font-manrope",
   display: "swap",
 });
-const amiri = Amiri({
-  subsets: ["arabic"],
-  weight: ["400", "700"],
-  variable: "--font-amiri",
-  display: "swap",
-});
-const reem = Reem_Kufi({
+// Clean, modern Arabic sans-serif (used for both Arabic body and headings).
+const notoArabic = Noto_Sans_Arabic({
   subsets: ["arabic"],
   weight: ["400", "500", "600", "700"],
-  variable: "--font-reem",
+  variable: "--font-arabic",
   display: "swap",
 });
 
@@ -72,7 +67,7 @@ export default function RootLayout({
       lang="en"
       dir="ltr"
       suppressHydrationWarning
-      className={`${marcellus.variable} ${manrope.variable} ${amiri.variable} ${reem.variable}`}
+      className={`${marcellus.variable} ${manrope.variable} ${notoArabic.variable}`}
     >
       <body>
         <LanguageProvider>{children}</LanguageProvider>

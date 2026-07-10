@@ -1,7 +1,11 @@
-Drop your real brand assets here to override the built-in SVG placeholders:
+Add your three real brand assets here. The app uses them automatically the
+moment these exact filenames exist (until then, illustrated placeholders show):
 
-  building.jpg    ->  Hero cover (Dar Al Muneerah building photo, ~1600x1000+)
+  building.jpg     ->  Hero cover  (the Dar Al Muneerah building photo)
+  dar-logo.png     ->  Dar Al Muneerah logo  (navbar, hero, footer, admin)
+  iiui-logo.png    ->  IIUI seal logo        (navbar, hero, footer)
 
-The IIUI and Dar Al Muneerah logos render as inline SVGs by default
-(src/components/ui/Logo.tsx). To use real PNG/JPEG logos, place them here as
-dar-logo.png / iiui-logo.png and swap the <svg> for <img> in that component.
+Notes:
+- PNG with a transparent background looks best for the two logos.
+- No code changes are needed — just drop the files in /public/images with these
+  names and refresh the site.

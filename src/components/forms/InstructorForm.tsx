@@ -13,6 +13,7 @@ import { instructorSchema, type InstructorInput } from "@/lib/validations";
 import {
   INSTRUCTOR_COURSES,
   TAJWEED_LEVELS,
+  TAUGHT_LEVELS,
   ACADEMIC_LEVELS,
   EXPERIENCE_YEARS,
   TEACHING_MODES,
@@ -57,7 +58,7 @@ export function InstructorForm() {
   const isTajweed = INSTRUCTOR_COURSES.find((c) => c.key === course)?.leveled;
 
   const stepFields: (keyof InstructorInput)[][] = [
-    ["fullName", "email", "phone", "nationality", "nationalId", "employeeNo", "universityId"],
+    ["fullName", "email", "phone", "nationality", "nationalId", "employeeNo"],
     ["department", "specialization", "academicLevel"],
     ["course", "courseLevel", "taughtBefore", "highestLevelTaught", "instituteName", "experienceYears", "teachingMode"],
     [],
@@ -135,9 +136,6 @@ export function InstructorForm() {
             <Field label={d.form.employeeNo} required error={errors.employeeNo?.message}>
               <Input {...register("employeeNo")} />
             </Field>
-            <Field label={d.form.universityId} error={errors.universityId?.message}>
-              <Input {...register("universityId")} />
-            </Field>
           </div>
         )}
 
@@ -202,11 +200,19 @@ export function InstructorForm() {
             </Field>
 
             {taughtBefore && (
-              <div className="grid gap-5 sm:grid-cols-2">
+              <div className="grid gap-5">
                 <Field label={d.form.highestLevel} error={errors.highestLevelTaught?.message}>
-                  <Input {...register("highestLevelTaught")} />
+                  <RadioPills
+                    name="highestLevelTaught"
+                    value={watch("highestLevelTaught") || ""}
+                    onChange={(v) => setValue("highestLevelTaught", v)}
+                    options={TAUGHT_LEVELS.map((l) => ({
+                      value: l.key,
+                      label: lang === "ar" ? l.ar : l.en,
+                    }))}
+                  />
                 </Field>
-                <Field label={d.form.instituteName} error={errors.instituteName?.message}>
+                <Field label={d.form.instructorInstitute} error={errors.instituteName?.message}>
                   <Input {...register("instituteName")} />
                 </Field>
               </div>
@@ -241,40 +247,16 @@ export function InstructorForm() {
         {step === 3 && (
           <div className="grid gap-5 sm:grid-cols-2">
             <FileUpload
+              label={d.form.uploadUniEmployeeCard}
+              required
+              value={files[d.form.uploadUniEmployeeCard] || null}
+              onChange={setFile(d.form.uploadUniEmployeeCard)}
+            />
+            <FileUpload
               label={d.form.uploadCv}
               required
               value={files[d.form.uploadCv] || null}
               onChange={setFile(d.form.uploadCv)}
-            />
-            <FileUpload
-              label={d.form.uploadUniId}
-              value={files[d.form.uploadUniId] || null}
-              onChange={setFile(d.form.uploadUniId)}
-            />
-            <FileUpload
-              label={d.form.uploadEmployeeId}
-              value={files[d.form.uploadEmployeeId] || null}
-              onChange={setFile(d.form.uploadEmployeeId)}
-            />
-            <FileUpload
-              label={d.form.uploadNationalId}
-              value={files[d.form.uploadNationalId] || null}
-              onChange={setFile(d.form.uploadNationalId)}
-            />
-            <FileUpload
-              label={d.form.uploadPhoto}
-              value={files[d.form.uploadPhoto] || null}
-              onChange={setFile(d.form.uploadPhoto)}
-            />
-            <FileUpload
-              label={d.form.uploadTeachingCert}
-              value={files[d.form.uploadTeachingCert] || null}
-              onChange={setFile(d.form.uploadTeachingCert)}
-            />
-            <FileUpload
-              label={d.form.uploadExpCert}
-              value={files[d.form.uploadExpCert] || null}
-              onChange={setFile(d.form.uploadExpCert)}
             />
           </div>
         )}
