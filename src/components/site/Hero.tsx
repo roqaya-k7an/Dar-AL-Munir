@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, GraduationCap, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { DarLogo, IIUILogo } from "@/components/ui/Logo";
 import { SocialIcons } from "@/components/ui/Social";
@@ -84,21 +84,16 @@ export function Hero() {
                 {d.hero.lead}
               </p>
 
-              <div className="mt-9 flex flex-wrap gap-3">
-                <Link href="/register/student" className="btn-accent">
-                  <GraduationCap className="h-4 w-4" />
-                  {d.hero.registerStudent}
+              <div className="mt-9 flex flex-wrap items-center gap-3">
+                <Link href="/register" className="btn-accent text-base">
+                  {d.hero.getStarted}
+                  <Arrow className="h-4 w-4" />
                 </Link>
                 <Link
-                  href="/register/instructor"
+                  href="/#about"
                   className="btn border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20"
                 >
-                  <Users className="h-4 w-4" />
-                  {d.hero.applyInstructor}
-                </Link>
-                <Link href="/#about" className="btn text-white/90 hover:text-white">
                   {d.hero.learnMore}
-                  <Arrow className="h-4 w-4" />
                 </Link>
               </div>
 

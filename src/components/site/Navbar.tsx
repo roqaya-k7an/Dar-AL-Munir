@@ -51,12 +51,12 @@ export function Navbar() {
         </Link>
 
         {/* Desktop links */}
-        <ul className="mx-auto hidden items-center gap-1 lg:flex">
+        <ul className="mx-auto hidden items-center gap-0.5 lg:flex">
           {links.map((l) => (
             <li key={l.href}>
               <Link
                 href={l.href}
-                className="rounded-full px-3.5 py-2 text-sm font-medium text-emerald-deep/80 transition hover:bg-emerald/8 hover:text-emerald-deep"
+                className="whitespace-nowrap rounded-full px-3 py-2 text-sm font-medium text-emerald-deep/80 transition hover:bg-emerald/8 hover:text-emerald-deep"
               >
                 {t(l.key)}
               </Link>
@@ -65,15 +65,21 @@ export function Navbar() {
         </ul>
 
         <div className="ms-auto flex items-center gap-2 lg:ms-0">
-          <div className="hidden md:block">
+          <div className="hidden lg:block">
             <SocialIcons variant="dark" />
           </div>
           <LanguageSwitch />
           <Link
-            href="/register/student"
-            className="hidden rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-white shadow-glass transition hover:bg-emerald-soft xl:inline-flex"
+            href="/admin/login"
+            className="hidden whitespace-nowrap rounded-full border border-emerald/20 bg-white/70 px-4 py-2 text-sm font-semibold text-emerald-deep transition hover:bg-white lg:inline-flex"
           >
-            {t("nav.student")}
+            {t("nav.admin")}
+          </Link>
+          <Link
+            href="/register"
+            className="hidden whitespace-nowrap rounded-full bg-emerald px-4 py-2 text-sm font-semibold text-white shadow-glass transition hover:bg-emerald-soft sm:inline-flex"
+          >
+            {t("hero.getStarted")}
           </Link>
           <button
             className="grid h-10 w-10 place-items-center rounded-full text-emerald-deep lg:hidden"
@@ -102,18 +108,18 @@ export function Navbar() {
             ))}
             <li className="mt-2 flex gap-2">
               <Link
-                href="/register/student"
+                href="/register"
                 onClick={() => setOpen(false)}
                 className="btn-primary flex-1"
               >
-                {t("nav.student")}
+                {t("hero.getStarted")}
               </Link>
               <Link
-                href="/register/instructor"
+                href="/admin/login"
                 onClick={() => setOpen(false)}
                 className="btn-ghost flex-1"
               >
-                {t("nav.instructor")}
+                {t("nav.admin")}
               </Link>
             </li>
             <li className="mt-3">
