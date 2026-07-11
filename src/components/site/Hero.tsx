@@ -48,13 +48,13 @@ export function Hero() {
             />
           </div>
 
-          {/* Frosted glass layer — clean, even blur over the whole cover */}
-          <div className="absolute inset-0 -z-10 bg-emerald-deep/35 backdrop-blur-md" />
-          {/* Soft directional tint for depth + text legibility */}
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(8,58,37,.82)_0%,rgba(11,93,59,.55)_50%,rgba(22,120,150,.30)_100%)]" />
+          {/* Clean diagonal overlay (as in the blueprint cover): dark green on
+              the left for legible text, fading so the building stays crisp on
+              the right. No blur, no texture. */}
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(8,58,37,.92)_0%,rgba(11,93,59,.62)_38%,rgba(11,93,59,.24)_64%,rgba(22,120,150,.10)_100%)]" />
 
-          <div className="flex min-h-[80vh] flex-col justify-center p-6 sm:p-10 lg:p-14">
-            <div className="max-w-2xl rounded-3xl border border-white/15 bg-white/10 p-8 shadow-glass-lg backdrop-blur-xl sm:p-10">
+          <div className="flex min-h-[80vh] flex-col justify-center p-8 sm:p-12 lg:p-16">
+            <div className="max-w-2xl">
               <div className="mb-7 flex items-center gap-3">
                 <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/92 shadow-glass-lg">
                   <DarLogo className="h-12 w-12" />
