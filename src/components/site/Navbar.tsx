@@ -40,14 +40,9 @@ export function Navbar() {
       )}
     >
       <nav className="container-x flex items-center gap-3 py-3">
-        <Link href="/#home" className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5">
-            <DarLogo className="h-10 w-10 rounded-xl shadow-card" />
-            <IIUILogo className="h-10 w-10 rounded-xl shadow-card" />
-          </div>
-          <span className="hidden font-display text-lg leading-none text-emerald-deep sm:block">
-            {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Al Muneerah"}
-          </span>
+        <Link href="/#home" className="flex items-center gap-2">
+          <DarLogo className="h-12 w-12 rounded-xl" />
+          <IIUILogo className="h-12 w-12 rounded-xl" />
         </Link>
 
         {/* Desktop links */}
