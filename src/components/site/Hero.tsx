@@ -33,7 +33,7 @@ export function Hero() {
               illustrated placeholder until then. */}
           <div
             className="absolute inset-0 -z-10"
-            style={{ transform: `translateY(${y * 0.18}px) scale(1.08)` }}
+            style={{ transform: `translateY(${y * 0.18}px) scale(1.12)` }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -48,20 +48,13 @@ export function Hero() {
             />
           </div>
 
-          {/* Diagonal green→teal overlay (from the blueprint cover) */}
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(120deg,rgba(8,58,37,.86)_0%,rgba(11,93,59,.66)_42%,rgba(22,120,150,.42)_100%)]" />
+          {/* Frosted glass layer — clean, even blur over the whole cover */}
+          <div className="absolute inset-0 -z-10 bg-emerald-deep/35 backdrop-blur-md" />
+          {/* Soft directional tint for depth + text legibility */}
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(8,58,37,.82)_0%,rgba(11,93,59,.55)_50%,rgba(22,120,150,.30)_100%)]" />
 
-          {/* Geometric texture */}
-          <div
-            className="absolute inset-0 -z-10 opacity-[0.12]"
-            style={{
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' viewBox='0 0 60 60'%3E%3Cg fill='none' stroke='%23ffffff' stroke-width='1'%3E%3Cpath d='M30 0l30 30-30 30L0 30z'/%3E%3Ccircle cx='30' cy='30' r='12'/%3E%3C/g%3E%3C/svg%3E\")",
-            }}
-          />
-
-          <div className="flex min-h-[80vh] flex-col justify-center p-8 sm:p-12 lg:p-16">
-            <div className="max-w-3xl">
+          <div className="flex min-h-[80vh] flex-col justify-center p-6 sm:p-10 lg:p-14">
+            <div className="max-w-2xl rounded-3xl border border-white/15 bg-white/10 p-8 shadow-glass-lg backdrop-blur-xl sm:p-10">
               <div className="mb-7 flex items-center gap-3">
                 <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/92 shadow-glass-lg">
                   <DarLogo className="h-12 w-12" />
