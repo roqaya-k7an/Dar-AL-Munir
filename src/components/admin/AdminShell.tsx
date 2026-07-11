@@ -36,12 +36,17 @@ export function AdminShell({
   const router = useRouter();
   const [dark, setDark] = useState(false);
   const [open, setOpen] = useState(false);
+  const [pending, setPending] = useState<number | null>(null);
 
   useEffect(() => {
     const stored = localStorage.getItem("dam_admin_theme");
     const isDark = stored === "dark";
     setDark(isDark);
     document.documentElement.classList.toggle("dark", isDark);
+    fetch("/api/admin/stats")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((res) => res && setPending(res.data.totals.pending))
+      .catch(() => {});
   }, []);
 
   function toggleTheme() {
@@ -124,9 +129,19 @@ export function AdminShell({
             <Menu className="h-5 w-5" />
           </button>
           <div className="ms-auto flex items-center gap-2">
-            <span className="hidden items-center gap-1.5 rounded-full bg-emerald/10 px-3 py-1.5 text-xs font-medium text-emerald dark:bg-white/10 dark:text-white sm:inline-flex">
-              <Bell className="h-3.5 w-3.5" /> Notifications
-            </span>
+            <Link
+              href="/admin/students"
+              className="relative hidden items-center gap-1.5 rounded-full bg-emerald/10 px-3 py-1.5 text-xs font-medium text-emerald transition hover:bg-emerald/15 dark:bg-white/10 dark:text-white sm:inline-flex"
+              title="Pending applications"
+            >
+              <Bell className="h-3.5 w-3.5" />
+              {pending && pending > 0 ? `${pending} pending` : "Notifications"}
+              {pending && pending > 0 ? (
+                <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-bold text-white">
+                  {pending}
+                </span>
+              ) : null}
+            </Link>
             <button
               onClick={toggleTheme}
               aria-label="Toggle theme"

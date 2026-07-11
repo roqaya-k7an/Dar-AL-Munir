@@ -4,6 +4,7 @@ import Link from "next/link";
 import { GraduationCap, Users, ArrowRight, ArrowLeft } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Reveal } from "@/components/ui/Reveal";
+import { BackLink } from "@/components/ui/BackLink";
 
 export function RegisterChooser() {
   const { d, dir } = useLang();
@@ -28,6 +29,9 @@ export function RegisterChooser() {
 
   return (
     <div className="container-x max-w-4xl py-16">
+      <div className="mb-8">
+        <BackLink href="/" label={d.nav.home} />
+      </div>
       <Reveal className="mx-auto max-w-2xl text-center">
         <span className="section-kicker">{d.join.kicker}</span>
         <h1 className="mt-3 font-display text-4xl text-emerald-deep sm:text-5xl">

@@ -8,7 +8,7 @@ import { LogIn, ShieldCheck } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Field, Input } from "@/components/ui/Field";
 import { LanguageSwitch } from "@/components/ui/LanguageSwitch";
-import { DarLogo } from "@/components/ui/Logo";
+import { BackLink } from "@/components/ui/BackLink";
 import { loginSchema, type LoginInput } from "@/lib/validations";
 import { Suspense } from "react";
 
@@ -42,7 +42,7 @@ function LoginInner() {
     <div className="flex min-h-screen items-center justify-center px-5 py-10">
       <div className="w-full max-w-md">
         <div className="mb-6 flex items-center justify-between">
-          <DarLogo className="h-12 w-12 rounded-xl shadow-card" />
+          <BackLink href="/" label={d.nav.home} />
           <LanguageSwitch />
         </div>
         <div className="glass rounded-3xl p-8">

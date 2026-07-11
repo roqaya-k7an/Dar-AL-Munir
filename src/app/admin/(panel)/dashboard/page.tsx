@@ -9,10 +9,73 @@ import {
   CheckCircle2,
   XCircle,
 } from "lucide-react";
+import Link from "next/link";
 import { StatCard, ChartCard } from "@/components/admin/StatCard";
 import { DonutChart, BarsChart, TrendChart } from "@/components/admin/Charts";
-import { courseLabel } from "@/lib/constants";
-import { STATUS_META } from "@/lib/constants";
+import { courseLabel, STATUS_META } from "@/lib/constants";
+import { formatDate, cn } from "@/lib/utils";
+
+interface Row {
+  id: string;
+  kind: string;
+  fullName: string;
+  course: string;
+  nationality: string;
+  status: string;
+  createdAt: string;
+}
+
+const statusTone: Record<string, string> = {
+  PENDING: "bg-amber-100 text-amber-700",
+  APPROVED: "bg-emerald/10 text-emerald",
+  REJECTED: "bg-rose-100 text-rose-600",
+  ARCHIVED: "bg-slate-200 text-slate-600",
+};
+
+function MiniTable({ title, rows, href }: { title: string; rows: Row[]; href: string }) {
+  return (
+    <div className="admin-surface rounded-2xl border border-emerald/10 bg-white/80 p-5 shadow-card">
+      <div className="mb-3 flex items-center justify-between">
+        <h3 className="font-display text-lg text-emerald-deep dark:text-white">{title}</h3>
+        <Link href={href} className="text-xs font-semibold text-emerald hover:underline">
+          View all →
+        </Link>
+      </div>
+      {rows.length === 0 ? (
+        <p className="py-8 text-center text-sm text-brand-muted">Nothing yet.</p>
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[520px] text-sm">
+            <thead>
+              <tr className="text-left text-xs uppercase tracking-wide text-brand-muted">
+                <th className="pb-2 font-semibold">Name</th>
+                <th className="pb-2 font-semibold">Type</th>
+                <th className="pb-2 font-semibold">Course</th>
+                <th className="pb-2 font-semibold">Status</th>
+                <th className="pb-2 font-semibold">Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.kind + r.id} className="border-t border-emerald/5">
+                  <td className="py-2 font-medium text-emerald-deep dark:text-white">{r.fullName}</td>
+                  <td className="py-2 capitalize text-brand-muted">{r.kind}</td>
+                  <td className="py-2 text-brand-muted">{courseLabel(r.course, "en")}</td>
+                  <td className="py-2">
+                    <span className={cn("chip", statusTone[r.status])}>
+                      {STATUS_META[r.status as keyof typeof STATUS_META]?.en || r.status}
+                    </span>
+                  </td>
+                  <td className="py-2 text-brand-muted">{formatDate(r.createdAt)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
 
 interface Stats {
   totals: {
@@ -29,6 +92,8 @@ interface Stats {
   byDepartment: { name: string; value: number }[];
   byAcademicLevel: { name: string; value: number }[];
   monthly: { month: string; students: number; instructors: number }[];
+  recent: Row[];
+  pending: Row[];
 }
 
 export default function DashboardPage() {
@@ -114,6 +179,18 @@ export default function DashboardPage() {
           <DonutChart data={stats.byAcademicLevel} />
         </ChartCard>
       </div>
+
+      {/* Tables */}
+      <MiniTable
+        title="Recent Registrations"
+        rows={stats.recent}
+        href="/admin/students"
+      />
+      <MiniTable
+        title="Pending Applications"
+        rows={stats.pending}
+        href="/admin/students"
+      />
     </div>
   );
 }

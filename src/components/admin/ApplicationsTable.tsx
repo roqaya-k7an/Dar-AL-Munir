@@ -11,9 +11,13 @@ import {
   Check,
   X,
   Archive,
-  ChevronRight,
   Filter,
+  FileDown,
+  Pencil,
+  Save,
 } from "lucide-react";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { COURSES, INSTRUCTOR_COURSES, STATUS_META, courseLabel } from "@/lib/constants";
 import { formatDate, formatBytes, cn } from "@/lib/utils";
 
@@ -53,6 +57,8 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("");
   const [course, setCourse] = useState("");
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
   const [selected, setSelected] = useState<AppRec | null>(null);
 
   const courseList = kind === "instructor" ? INSTRUCTOR_COURSES : COURSES;
@@ -63,13 +69,15 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
     if (q) params.set("q", q);
     if (status) params.set("status", status);
     if (course) params.set("course", course);
+    if (from) params.set("from", from);
+    if (to) params.set("to", to);
     const res = await fetch(`/api/admin/applications?${params}`);
     if (res.ok) {
       const json = await res.json();
       setRows(json.data);
     }
     setLoading(false);
-  }, [kind, q, status, course]);
+  }, [kind, q, status, course, from, to]);
 
   useEffect(() => {
     const t = setTimeout(load, 250);
@@ -135,6 +143,43 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
     URL.revokeObjectURL(url);
   }
 
+  function exportPdf() {
+    const doc = new jsPDF({ orientation: "landscape" });
+    doc.setFontSize(16);
+    doc.setTextColor(11, 93, 59);
+    doc.text(
+      `Dar Al Muneerah — ${kind === "instructor" ? "Instructor" : "Student"} Applications`,
+      14,
+      16,
+    );
+    doc.setFontSize(9);
+    doc.setTextColor(120);
+    doc.text(`Generated ${new Date().toLocaleString()}`, 14, 22);
+    autoTable(doc, {
+      startY: 28,
+      head: [["Name", "Email", "Phone", "Nationality", "Course", "Status", "Date"]],
+      body: rows.map((r) => [
+        r.fullName,
+        r.email,
+        r.phone,
+        r.nationality,
+        courseLabel(r.course, "en"),
+        r.status,
+        formatDate(r.createdAt),
+      ]),
+      headStyles: { fillColor: [11, 93, 59] },
+      styles: { fontSize: 8, cellPadding: 2 },
+      alternateRowStyles: { fillColor: [244, 248, 242] },
+    });
+    doc.save(`${kind}-applications-${Date.now()}.pdf`);
+  }
+
+  // Apply an edited record from the drawer back into the table.
+  function applyEdit(updated: AppRec) {
+    setRows((prev) => prev.map((r) => (r.id === updated.id ? updated : r)));
+    setSelected(updated);
+  }
+
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -148,7 +193,10 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
         </div>
         <div className="flex flex-wrap gap-2">
           <button onClick={exportCsv} className="btn-ghost !py-2 text-sm">
-            <Download className="h-4 w-4" /> Export CSV
+            <Download className="h-4 w-4" /> Excel / CSV
+          </button>
+          <button onClick={exportPdf} className="btn-ghost !py-2 text-sm">
+            <FileDown className="h-4 w-4" /> PDF
           </button>
           <button onClick={() => window.print()} className="btn-ghost !py-2 text-sm">
             <Printer className="h-4 w-4" /> Print
@@ -186,6 +234,38 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
             </option>
           ))}
         </select>
+        <label className="flex items-center gap-1.5 text-xs text-brand-muted">
+          From
+          <input
+            type="date"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
+            className="field-input w-auto !py-1.5"
+          />
+        </label>
+        <label className="flex items-center gap-1.5 text-xs text-brand-muted">
+          To
+          <input
+            type="date"
+            value={to}
+            onChange={(e) => setTo(e.target.value)}
+            className="field-input w-auto !py-1.5"
+          />
+        </label>
+        {(q || status || course || from || to) && (
+          <button
+            onClick={() => {
+              setQ("");
+              setStatus("");
+              setCourse("");
+              setFrom("");
+              setTo("");
+            }}
+            className="text-xs font-semibold text-rose-500 hover:underline"
+          >
+            Clear
+          </button>
+        )}
       </div>
 
       {/* Table */}
@@ -270,11 +350,44 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
           onClose={() => setSelected(null)}
           onStatus={updateStatus}
           onDelete={remove}
+          onSaved={applyEdit}
         />
       )}
     </div>
   );
 }
+
+const EDITABLE: Record<Kind, [string, string][]> = {
+  student: [
+    ["fullName", "Full Name"],
+    ["email", "Email"],
+    ["phone", "Phone"],
+    ["fatherPhone", "Father's Phone"],
+    ["nationality", "Nationality"],
+    ["nationalId", "National ID"],
+    ["registrationNo", "Registration No"],
+    ["department", "Department"],
+    ["specialization", "Specialization"],
+    ["academicLevel", "Academic Level"],
+    ["completedLevel", "Completed Level"],
+    ["instituteName", "Institute"],
+  ],
+  instructor: [
+    ["fullName", "Full Name"],
+    ["email", "Email"],
+    ["phone", "Phone"],
+    ["nationality", "Nationality"],
+    ["nationalId", "National ID"],
+    ["employeeNo", "Employee No"],
+    ["department", "Department"],
+    ["specialization", "Specialization"],
+    ["academicLevel", "Academic Level"],
+    ["highestLevelTaught", "Highest Level Taught"],
+    ["experienceYears", "Experience"],
+    ["teachingMode", "Teaching Mode"],
+    ["instituteName", "Institute"],
+  ],
+};
 
 function DetailDrawer({
   kind,
@@ -282,13 +395,42 @@ function DetailDrawer({
   onClose,
   onStatus,
   onDelete,
+  onSaved,
 }: {
   kind: Kind;
   rec: AppRec;
   onClose: () => void;
   onStatus: (id: string, s: string) => void;
   onDelete: (id: string) => void;
+  onSaved: (updated: AppRec) => void;
 }) {
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState<Record<string, string>>({});
+
+  function startEdit() {
+    const init: Record<string, string> = {};
+    for (const [key] of EDITABLE[kind]) init[key] = (rec as any)[key] ?? "";
+    init.notes = rec.notes ?? "";
+    setForm(init);
+    setEditing(true);
+  }
+
+  async function save() {
+    setSaving(true);
+    const res = await fetch(`/api/admin/applications/${kind}/${rec.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+    setSaving(false);
+    if (res.ok) {
+      const json = await res.json();
+      onSaved({ ...rec, ...json.data });
+      setEditing(false);
+    }
+  }
+
   const fields =
     kind === "student"
       ? [
@@ -363,6 +505,19 @@ function DetailDrawer({
           <button onClick={() => onStatus(rec.id, "ARCHIVED")} className="btn-ghost !py-2 text-sm">
             <Archive className="h-4 w-4" /> Archive
           </button>
+          {!editing ? (
+            <button onClick={startEdit} className="btn-ghost !py-2 text-sm">
+              <Pencil className="h-4 w-4" /> Edit
+            </button>
+          ) : (
+            <button
+              onClick={save}
+              disabled={saving}
+              className="btn !py-2 text-sm bg-leaf text-emerald-deep hover:brightness-105"
+            >
+              <Save className="h-4 w-4" /> {saving ? "Saving…" : "Save"}
+            </button>
+          )}
           <button
             onClick={() => onDelete(rec.id)}
             className="btn !py-2 text-sm border border-rose-200 text-rose-600 hover:bg-rose-50"
@@ -372,18 +527,59 @@ function DetailDrawer({
         </div>
 
         {/* Fields */}
-        <div className="admin-surface rounded-2xl border border-emerald/10 bg-white/80 p-5">
-          <dl className="grid gap-2">
-            {fields.map(([k, v]) => (
-              <div key={k as string} className="flex justify-between gap-4 border-b border-emerald/5 py-1.5 text-sm">
-                <dt className="text-brand-muted">{k}</dt>
-                <dd className="text-right font-medium text-emerald-deep dark:text-white">
-                  {v || "—"}
-                </dd>
+        {editing ? (
+          <div className="admin-surface rounded-2xl border border-emerald/10 bg-white/80 p-5">
+            <div className="grid gap-3">
+              {EDITABLE[kind].map(([key, label]) => (
+                <div key={key}>
+                  <label className="mb-1 block text-xs font-medium text-brand-muted">
+                    {label}
+                  </label>
+                  <input
+                    value={form[key] ?? ""}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                    className="field-input !py-2"
+                  />
+                </div>
+              ))}
+              <div>
+                <label className="mb-1 block text-xs font-medium text-brand-muted">
+                  Admin Notes
+                </label>
+                <textarea
+                  value={form.notes ?? ""}
+                  onChange={(e) => setForm((f) => ({ ...f, notes: e.target.value }))}
+                  rows={2}
+                  className="field-input !py-2"
+                />
               </div>
-            ))}
-          </dl>
-        </div>
+              <button
+                onClick={() => setEditing(false)}
+                className="text-xs font-semibold text-brand-muted hover:underline"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="admin-surface rounded-2xl border border-emerald/10 bg-white/80 p-5">
+            <dl className="grid gap-2">
+              {fields.map(([k, v]) => (
+                <div key={k as string} className="flex justify-between gap-4 border-b border-emerald/5 py-1.5 text-sm">
+                  <dt className="text-brand-muted">{k}</dt>
+                  <dd className="text-right font-medium text-emerald-deep dark:text-white">
+                    {v || "—"}
+                  </dd>
+                </div>
+              ))}
+              {rec.notes && (
+                <div className="mt-1 rounded-lg bg-emerald/5 p-2 text-xs text-emerald-deep dark:text-white/80">
+                  <span className="font-semibold">Notes:</span> {rec.notes}
+                </div>
+              )}
+            </dl>
+          </div>
+        )}
 
         {/* Files */}
         <h3 className="mb-3 mt-6 font-display text-lg text-emerald-deep dark:text-white">
