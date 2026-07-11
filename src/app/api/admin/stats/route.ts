@@ -36,6 +36,46 @@ export async function GET() {
 
     const all = [...students, ...instructors];
 
+    // Recent registrations + pending applications (both kinds, merged).
+    const [recentStudents, recentInstructors] = await Promise.all([
+      prisma.studentApplication.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 8,
+        select: {
+          id: true,
+          fullName: true,
+          course: true,
+          nationality: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
+      prisma.instructorApplication.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 8,
+        select: {
+          id: true,
+          fullName: true,
+          course: true,
+          nationality: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
+    ]);
+    const tag = (rows: any[], kind: string) =>
+      rows.map((r) => ({ ...r, kind }));
+    const recent = [
+      ...tag(recentStudents, "student"),
+      ...tag(recentInstructors, "instructor"),
+    ]
+      .sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      )
+      .slice(0, 8);
+    const pending = recent.filter((r) => r.status === "PENDING").slice(0, 8);
+
     const countBy = <T extends { [k: string]: any }>(
       rows: T[],
       key: keyof T,
@@ -92,6 +132,8 @@ export async function GET() {
       byDepartment: countBy(all, "department").slice(0, 8),
       byAcademicLevel: countBy(students, "academicLevel"),
       monthly,
+      recent,
+      pending,
     });
   } catch {
     return fail("Could not compute statistics", 500);

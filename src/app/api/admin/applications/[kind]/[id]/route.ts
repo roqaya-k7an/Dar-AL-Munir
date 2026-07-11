@@ -24,6 +24,36 @@ export async function PATCH(req: Request, { params }: Params) {
     data.status = body.status;
   }
   if (typeof body.notes === "string") data.notes = sanitizeText(body.notes);
+
+  // Whitelisted editable fields (admin "Edit" in the drawer).
+  const commonEditable = [
+    "fullName",
+    "email",
+    "phone",
+    "nationality",
+    "nationalId",
+    "department",
+    "specialization",
+    "academicLevel",
+    "instituteName",
+  ];
+  const studentEditable = ["fatherPhone", "registrationNo", "completedLevel"];
+  const instructorEditable = [
+    "employeeNo",
+    "highestLevelTaught",
+    "experienceYears",
+    "teachingMode",
+  ];
+  const editable = [
+    ...commonEditable,
+    ...(params.kind === "instructor" ? instructorEditable : studentEditable),
+  ];
+  for (const key of editable) {
+    if (typeof body[key] === "string") {
+      data[key] = body[key] === "" ? null : sanitizeText(body[key]);
+    }
+  }
+
   if (Object.keys(data).length === 0) return fail("Nothing to update", 400);
 
   try {

@@ -14,12 +14,23 @@ export async function GET(req: Request) {
   const status = url.searchParams.get("status") || "";
   const course = url.searchParams.get("course") || "";
   const nationality = url.searchParams.get("nationality") || "";
+  const from = url.searchParams.get("from") || "";
+  const to = url.searchParams.get("to") || "";
   const take = Math.min(Number(url.searchParams.get("take")) || 100, 500);
 
   const where: any = {};
   if (status) where.status = status;
   if (course) where.course = course;
   if (nationality) where.nationality = nationality;
+  if (from || to) {
+    where.createdAt = {};
+    if (from) where.createdAt.gte = new Date(from);
+    if (to) {
+      const end = new Date(to);
+      end.setHours(23, 59, 59, 999);
+      where.createdAt.lte = end;
+    }
+  }
   if (q) {
     where.OR = [
       { fullName: { contains: q } },
