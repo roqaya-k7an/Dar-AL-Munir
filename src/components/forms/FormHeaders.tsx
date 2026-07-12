@@ -29,3 +29,16 @@ export function InstructorHeader() {
     </header>
   );
 }
+
+export function VisitingHeader() {
+  const { d } = useLang();
+  return (
+    <header className="mb-7 text-center">
+      <span className="section-kicker">{d.join.visitingTitle}</span>
+      <h1 className="mt-2 font-display text-4xl text-emerald-deep">
+        {d.visiting.title}
+      </h1>
+      <p className="mx-auto mt-3 max-w-xl text-brand-muted">{d.visiting.lead}</p>
+    </header>
+  );
+}

@@ -8,6 +8,12 @@ export const runtime = "nodejs";
 
 type Params = { params: { kind: string; id: string } };
 
+function modelFor(kind: string) {
+  if (kind === "instructor") return prisma.instructorApplication;
+  if (kind === "visiting") return prisma.visitingTeacherApplication;
+  return prisma.studentApplication;
+}
+
 // PATCH: update status / notes (approve, reject, archive, edit)
 export async function PATCH(req: Request, { params }: Params) {
   const guard = await requireAdmin();
@@ -44,9 +50,14 @@ export async function PATCH(req: Request, { params }: Params) {
     "experienceYears",
     "teachingMode",
   ];
+  const visitingEditable = ["preferredTime", "preferredDate", "daysCount"];
   const editable = [
     ...commonEditable,
-    ...(params.kind === "instructor" ? instructorEditable : studentEditable),
+    ...(params.kind === "instructor"
+      ? instructorEditable
+      : params.kind === "visiting"
+        ? visitingEditable
+        : studentEditable),
   ];
   for (const key of editable) {
     if (typeof body[key] === "string") {
@@ -57,14 +68,7 @@ export async function PATCH(req: Request, { params }: Params) {
   if (Object.keys(data).length === 0) return fail("Nothing to update", 400);
 
   try {
-    if (params.kind === "instructor") {
-      const updated = await prisma.instructorApplication.update({
-        where: { id: params.id },
-        data,
-      });
-      return ok(updated);
-    }
-    const updated = await prisma.studentApplication.update({
+    const updated = await (modelFor(params.kind) as any).update({
       where: { id: params.id },
       data,
     });
@@ -80,10 +84,7 @@ export async function DELETE(_req: Request, { params }: Params) {
   if ("response" in guard) return guard.response;
 
   try {
-    const model =
-      params.kind === "instructor"
-        ? prisma.instructorApplication
-        : prisma.studentApplication;
+    const model = modelFor(params.kind);
 
     const existing = await (model as any).findUnique({
       where: { id: params.id },

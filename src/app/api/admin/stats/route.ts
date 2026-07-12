@@ -12,7 +12,7 @@ export async function GET() {
   if ("response" in guard) return guard.response;
 
   try {
-    const [students, instructors] = await Promise.all([
+    const [students, instructors, visiting] = await Promise.all([
       prisma.studentApplication.findMany({
         select: {
           status: true,
@@ -32,12 +32,20 @@ export async function GET() {
           createdAt: true,
         },
       }),
+      prisma.visitingTeacherApplication.findMany({
+        select: {
+          status: true,
+          course: true,
+          department: true,
+          createdAt: true,
+        },
+      }),
     ]);
 
-    const all = [...students, ...instructors];
+    const all = [...students, ...instructors, ...visiting];
 
-    // Recent registrations + pending applications (both kinds, merged).
-    const [recentStudents, recentInstructors] = await Promise.all([
+    // Recent registrations + pending applications (all kinds, merged).
+    const [recentStudents, recentInstructors, recentVisiting] = await Promise.all([
       prisma.studentApplication.findMany({
         orderBy: { createdAt: "desc" },
         take: 8,
@@ -62,12 +70,24 @@ export async function GET() {
           createdAt: true,
         },
       }),
+      prisma.visitingTeacherApplication.findMany({
+        orderBy: { createdAt: "desc" },
+        take: 8,
+        select: {
+          id: true,
+          fullName: true,
+          course: true,
+          status: true,
+          createdAt: true,
+        },
+      }),
     ]);
     const tag = (rows: any[], kind: string) =>
       rows.map((r) => ({ ...r, kind }));
     const recent = [
       ...tag(recentStudents, "student"),
       ...tag(recentInstructors, "instructor"),
+      ...tag(recentVisiting, "visiting"),
     ]
       .sort(
         (a, b) =>
@@ -120,6 +140,7 @@ export async function GET() {
       totals: {
         students: students.length,
         instructors: instructors.length,
+        visiting: visiting.length,
         registrations: all.length,
         pending: all.filter((r) => r.status === "PENDING").length,
         approved: all.filter((r) => r.status === "APPROVED").length,
@@ -128,7 +149,7 @@ export async function GET() {
       studentStatus: statusCounts(students),
       instructorStatus: statusCounts(instructors),
       byCourse: countBy(all, "course"),
-      byNationality: countBy(all, "nationality").slice(0, 8),
+      byNationality: countBy([...students, ...instructors], "nationality").slice(0, 8),
       byDepartment: countBy(all, "department").slice(0, 8),
       byAcademicLevel: countBy(students, "academicLevel"),
       monthly,

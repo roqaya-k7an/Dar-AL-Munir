@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { GraduationCap, Users, ArrowRight, ArrowLeft } from "lucide-react";
+import { GraduationCap, Users, UserPlus, ArrowRight, ArrowLeft } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Reveal } from "@/components/ui/Reveal";
 import { BackLink } from "@/components/ui/BackLink";
@@ -25,6 +25,13 @@ export function RegisterChooser() {
       desc: d.join.instructorDesc,
       tone: "from-teal to-leaf",
     },
+    {
+      href: "/register/visiting",
+      icon: UserPlus,
+      title: d.join.visitingTitle,
+      desc: d.join.visitingDesc,
+      tone: "from-emerald-soft to-emerald",
+    },
   ];
 
   return (
@@ -40,7 +47,7 @@ export function RegisterChooser() {
         <p className="mt-4 leading-relaxed text-brand-muted">{d.join.lead}</p>
       </Reveal>
 
-      <div className="mt-12 grid gap-6 sm:grid-cols-2">
+      <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {cards.map((c, i) => (
           <Reveal key={c.href} delay={i * 0.08}>
             <Link

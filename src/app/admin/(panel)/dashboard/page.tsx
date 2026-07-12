@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import {
   GraduationCap,
   Users,
+  UserPlus,
   ClipboardList,
   Clock,
   CheckCircle2,
@@ -81,6 +82,7 @@ interface Stats {
   totals: {
     students: number;
     instructors: number;
+    visiting: number;
     registrations: number;
     pending: number;
     approved: number;
@@ -139,9 +141,10 @@ export default function DashboardPage() {
       </div>
 
       {/* KPI cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4">
         <StatCard icon={GraduationCap} label="Total Students" value={stats.totals.students} tone="emerald" />
-        <StatCard icon={Users} label="Total Instructors" value={stats.totals.instructors} tone="teal" />
+        <StatCard icon={Users} label="Total Teachers" value={stats.totals.instructors} tone="teal" />
+        <StatCard icon={UserPlus} label="Visiting Teachers" value={stats.totals.visiting} tone="teal" />
         <StatCard icon={ClipboardList} label="Total Registrations" value={stats.totals.registrations} tone="leaf" />
         <StatCard icon={Clock} label="Pending" value={stats.totals.pending} tone="amber" />
         <StatCard icon={CheckCircle2} label="Approved" value={stats.totals.approved} tone="emerald" />

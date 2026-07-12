@@ -21,7 +21,7 @@ import autoTable from "jspdf-autotable";
 import { COURSES, INSTRUCTOR_COURSES, STATUS_META, courseLabel } from "@/lib/constants";
 import { formatDate, formatBytes, cn } from "@/lib/utils";
 
-type Kind = "student" | "instructor";
+type Kind = "student" | "instructor" | "visiting";
 
 interface FileRec {
   id: string;
@@ -184,8 +184,12 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="font-display text-3xl capitalize text-emerald-deep dark:text-white">
-            {kind}s
+          <h1 className="font-display text-3xl text-emerald-deep dark:text-white">
+            {kind === "instructor"
+              ? "Teachers"
+              : kind === "visiting"
+                ? "Visiting Teachers"
+                : "Students"}
           </h1>
           <p className="text-sm text-brand-muted dark:text-white/60">
             {rows.length} record{rows.length !== 1 && "s"}
@@ -358,6 +362,15 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
 }
 
 const EDITABLE: Record<Kind, [string, string][]> = {
+  visiting: [
+    ["fullName", "Full Name"],
+    ["email", "Email"],
+    ["phone", "Phone"],
+    ["department", "Department"],
+    ["preferredDate", "Preferred Date"],
+    ["preferredTime", "Preferred Time"],
+    ["daysCount", "Number of Days"],
+  ],
   student: [
     ["fullName", "Full Name"],
     ["email", "Email"],
@@ -432,7 +445,18 @@ function DetailDrawer({
   }
 
   const fields =
-    kind === "student"
+    kind === "visiting"
+      ? [
+          ["Full Name", rec.fullName],
+          ["Email", rec.email],
+          ["Phone", rec.phone],
+          ["Department", rec.department],
+          ["Course to Teach", courseLabel(rec.course, "en")],
+          ["Preferred Date", rec.preferredDate],
+          ["Preferred Time", rec.preferredTime],
+          ["Number of Days", rec.daysCount],
+        ]
+      : kind === "student"
       ? [
           ["Full Name", rec.fullName],
           ["Email", rec.email],

@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Reveal } from "@/components/ui/Reveal";
-import { COURSES, TAJWEED_LEVELS } from "@/lib/constants";
+import { COURSES, courseSubOptions } from "@/lib/constants";
 
 const iconMap: Record<string, LucideIcon> = {
   BookOpenCheck,
@@ -91,9 +91,9 @@ export function Courses() {
                       : descriptions[c.key].en}
                   </p>
 
-                  {c.leveled && (
+                  {courseSubOptions(c.key) && (
                     <div className="mt-4 flex flex-wrap gap-1.5">
-                      {TAJWEED_LEVELS.map((lv) => (
+                      {courseSubOptions(c.key)!.map((lv) => (
                         <span
                           key={lv.key}
                           className="chip bg-leaf/12 text-emerald-deep ring-1 ring-leaf/30"

@@ -73,6 +73,20 @@ export const instructorSchema = z.object({
 
 export type InstructorInput = z.infer<typeof instructorSchema>;
 
+export const visitingSchema = z.object({
+  fullName: z.string().regex(nameRe, "Enter a valid full name"),
+  phone: z.string().regex(phoneRe, "Enter a valid phone number"),
+  email: z.string().email("Enter a valid email"),
+  department: z.string().max(80).optional().or(z.literal("")),
+  course: z.enum(COURSE_KEYS as [string, ...string[]], {
+    errorMap: () => ({ message: "Select a course" }),
+  }),
+  preferredTime: z.string().max(40).optional().or(z.literal("")),
+  preferredDate: z.string().max(40).optional().or(z.literal("")),
+  daysCount: z.string().max(20).optional().or(z.literal("")),
+});
+export type VisitingInput = z.infer<typeof visitingSchema>;
+
 export const contactSchema = z.object({
   name: z.string().min(2, "Required").max(80),
   email: z.string().email("Enter a valid email"),

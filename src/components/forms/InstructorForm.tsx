@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { CheckCircle2, ArrowLeft, ArrowRight, Send } from "lucide-react";
+import { CheckCircle2, ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Stepper } from "@/components/ui/Stepper";
 import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
@@ -323,6 +323,11 @@ export function InstructorForm() {
           )}
         </div>
       </form>
+
+      <div className="mt-6 flex items-start gap-2 rounded-xl bg-emerald/5 p-3 text-sm text-emerald-deep">
+        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        {d.instructor.note}
+      </div>
     </div>
   );
 }
