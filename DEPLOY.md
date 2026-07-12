@@ -7,8 +7,7 @@ password.
 ## Steps
 1. Go to **https://render.com** and sign in with **GitHub**.
 2. Click **New +** → **Blueprint**.
-3. Select the repository **roqaya-k7an/Dar-AL-Munir** and the branch
-   **claude/dar-al-muneerah-website-mzj8hi**.
+3. Select the repository **roqaya-k7an/Dar-AL-Munir** and the branch **main**.
 4. Render reads `render.yaml` and shows a database + a web service. Click
    **Apply**.
 5. It will ask for the one value marked "set in dashboard":
