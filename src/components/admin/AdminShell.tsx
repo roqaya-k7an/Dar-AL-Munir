@@ -9,6 +9,7 @@ import {
   Users,
   UserPlus,
   Megaphone,
+  Mail,
   LogOut,
   Moon,
   Sun,
@@ -25,6 +26,7 @@ const nav = [
   { href: "/admin/instructors", label: "Teachers", icon: Users },
   { href: "/admin/visiting", label: "Visiting Teachers", icon: UserPlus },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
+  { href: "/admin/messages", label: "Messages", icon: Mail },
 ];
 
 export function AdminShell({

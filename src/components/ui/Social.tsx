@@ -3,9 +3,15 @@
 import { Facebook, Mail, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const fb = process.env.NEXT_PUBLIC_FACEBOOK_URL || "#";
-const wa = process.env.NEXT_PUBLIC_WHATSAPP_URL || "#";
-const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "info@example.com";
+// Official Dar Muneerah (IIUI) links — used as defaults so the icons always
+// open the correct page even if the env vars are not set at build time.
+const fb =
+  process.env.NEXT_PUBLIC_FACEBOOK_URL ||
+  "https://www.facebook.com/share/1DaZSaT1ik/";
+const wa =
+  process.env.NEXT_PUBLIC_WHATSAPP_URL ||
+  "https://whatsapp.com/channel/0029Vb6TTGM1yT27mWXd5h1m";
+const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "";
 
 export function SocialIcons({
   variant = "light",
@@ -42,7 +48,7 @@ export function SocialIcons({
         <MessageCircle className="h-4 w-4" />
       </a>
       <a
-        href={`mailto:${email}`}
+        href={email ? `mailto:${email}` : "/#contact"}
         aria-label="Email"
         className={cn(base, styles)}
       >
