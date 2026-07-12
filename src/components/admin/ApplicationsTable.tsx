@@ -15,6 +15,7 @@ import {
   FileDown,
   Pencil,
   Save,
+  Plus,
 } from "lucide-react";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -62,6 +63,44 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
   const [selected, setSelected] = useState<AppRec | null>(null);
 
   const courseList = kind === "instructor" ? INSTRUCTOR_COURSES : COURSES;
+
+  // Admin-create (Visiting Teacher only) — add an existing teacher directly.
+  const emptyCreate = {
+    fullName: "",
+    email: "",
+    phone: "",
+    department: "",
+    course: "",
+    preferredDate: "",
+    preferredTime: "",
+    daysCount: "",
+    status: "APPROVED",
+    notes: "",
+  };
+  const [showCreate, setShowCreate] = useState(false);
+  const [createForm, setCreateForm] = useState(emptyCreate);
+  const [creating, setCreating] = useState(false);
+  const [createError, setCreateError] = useState<string | null>(null);
+
+  async function createVisiting(e: React.FormEvent) {
+    e.preventDefault();
+    setCreateError(null);
+    setCreating(true);
+    const res = await fetch("/api/admin/visiting", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(createForm),
+    });
+    setCreating(false);
+    if (res.ok) {
+      const json = await res.json();
+      setRows((prev) => [json.data, ...prev]);
+      setCreateForm(emptyCreate);
+      setShowCreate(false);
+    } else {
+      setCreateError("Please check the fields (name, email, phone and course are required).");
+    }
+  }
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -196,6 +235,14 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
+          {kind === "visiting" && (
+            <button
+              onClick={() => setShowCreate((s) => !s)}
+              className="btn-primary !py-2 text-sm"
+            >
+              <Plus className="h-4 w-4" /> Add Visiting Teacher
+            </button>
+          )}
           <button onClick={exportCsv} className="btn-ghost !py-2 text-sm">
             <Download className="h-4 w-4" /> Excel / CSV
           </button>
@@ -207,6 +254,136 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
           </button>
         </div>
       </div>
+
+      {/* Admin create (Visiting Teacher) */}
+      {kind === "visiting" && showCreate && (
+        <form
+          onSubmit={createVisiting}
+          className="admin-surface grid gap-3 rounded-2xl border border-emerald/10 bg-white/80 p-5 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          <div>
+            <label className="field-label">Full Name *</label>
+            <input
+              className="field-input"
+              value={createForm.fullName}
+              onChange={(e) => setCreateForm({ ...createForm, fullName: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className="field-label">Email *</label>
+            <input
+              type="email"
+              className="field-input"
+              value={createForm.email}
+              onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className="field-label">Phone *</label>
+            <input
+              className="field-input"
+              value={createForm.phone}
+              onChange={(e) => setCreateForm({ ...createForm, phone: e.target.value })}
+              required
+            />
+          </div>
+          <div>
+            <label className="field-label">Department</label>
+            <input
+              className="field-input"
+              value={createForm.department}
+              onChange={(e) => setCreateForm({ ...createForm, department: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="field-label">Course *</label>
+            <select
+              className="field-input"
+              value={createForm.course}
+              onChange={(e) => setCreateForm({ ...createForm, course: e.target.value })}
+              required
+            >
+              <option value="">Select…</option>
+              {COURSES.map((c) => (
+                <option key={c.key} value={c.key}>
+                  {c.en}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="field-label">Status</label>
+            <select
+              className="field-input"
+              value={createForm.status}
+              onChange={(e) => setCreateForm({ ...createForm, status: e.target.value })}
+            >
+              {Object.keys(STATUS_META).map((s) => (
+                <option key={s} value={s}>
+                  {STATUS_META[s as keyof typeof STATUS_META].en}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="field-label">Preferred Date</label>
+            <input
+              type="date"
+              className="field-input"
+              value={createForm.preferredDate}
+              onChange={(e) => setCreateForm({ ...createForm, preferredDate: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="field-label">Preferred Time</label>
+            <input
+              type="time"
+              className="field-input"
+              value={createForm.preferredTime}
+              onChange={(e) => setCreateForm({ ...createForm, preferredTime: e.target.value })}
+            />
+          </div>
+          <div>
+            <label className="field-label">Number of Days</label>
+            <input
+              type="number"
+              min={1}
+              className="field-input"
+              value={createForm.daysCount}
+              onChange={(e) => setCreateForm({ ...createForm, daysCount: e.target.value })}
+            />
+          </div>
+          <div className="sm:col-span-2 lg:col-span-3">
+            <label className="field-label">Notes</label>
+            <textarea
+              className="field-input"
+              rows={2}
+              value={createForm.notes}
+              onChange={(e) => setCreateForm({ ...createForm, notes: e.target.value })}
+            />
+          </div>
+          {createError && (
+            <p className="sm:col-span-2 lg:col-span-3 text-sm font-medium text-rose-600">
+              {createError}
+            </p>
+          )}
+          <div className="flex gap-2 sm:col-span-2 lg:col-span-3">
+            <button type="submit" disabled={creating} className="btn-accent">
+              <Save className="h-4 w-4" />
+              {creating ? "Saving…" : "Save Teacher"}
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowCreate(false)}
+              className="btn-ghost"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      )}
 
       {/* Filters */}
       <div className="admin-surface flex flex-wrap items-center gap-3 rounded-2xl border border-emerald/10 bg-white/80 p-4">
