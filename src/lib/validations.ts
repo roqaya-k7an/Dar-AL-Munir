@@ -87,6 +87,16 @@ export const visitingSchema = z.object({
 });
 export type VisitingInput = z.infer<typeof visitingSchema>;
 
+// Admin-created visiting teacher (e.g. adding an existing/previous teacher).
+// CV is not required here, and the admin may set the status.
+export const visitingAdminSchema = visitingSchema.extend({
+  status: z
+    .enum(["PENDING", "APPROVED", "REJECTED", "ARCHIVED"])
+    .default("APPROVED"),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+});
+export type VisitingAdminInput = z.infer<typeof visitingAdminSchema>;
+
 export const contactSchema = z.object({
   name: z.string().min(2, "Required").max(80),
   email: z.string().email("Enter a valid email"),

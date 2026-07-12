@@ -152,6 +152,10 @@ export async function GET() {
       byNationality: countBy([...students, ...instructors], "nationality").slice(0, 8),
       byDepartment: countBy(all, "department").slice(0, 8),
       byAcademicLevel: countBy(students, "academicLevel"),
+      // Visiting-teacher-specific analytics
+      visitingByCourse: countBy(visiting, "course"),
+      visitingByDepartment: countBy(visiting, "department").slice(0, 8),
+      visitingStatus: statusCounts(visiting),
       monthly,
       recent,
       pending,

@@ -93,6 +93,9 @@ interface Stats {
   byNationality: { name: string; value: number }[];
   byDepartment: { name: string; value: number }[];
   byAcademicLevel: { name: string; value: number }[];
+  visitingByCourse: { name: string; value: number }[];
+  visitingByDepartment: { name: string; value: number }[];
+  visitingStatus: Record<string, number>;
   monthly: { month: string; students: number; instructors: number }[];
   recent: Row[];
   pending: Row[];
@@ -128,6 +131,15 @@ export default function DashboardPage() {
     name: STATUS_META[k as keyof typeof STATUS_META]?.en || k,
     value: v,
   }));
+  const visitingCourseData = stats.visitingByCourse.map((c) => ({
+    name: courseLabel(c.name, "en"),
+    value: c.value,
+  }));
+  const visitingStatusData = Object.entries(stats.visitingStatus).map(([k, v]) => ({
+    name: STATUS_META[k as keyof typeof STATUS_META]?.en || k,
+    value: v,
+  }));
+  const hasVisiting = stats.totals.visiting > 0;
 
   return (
     <div className="space-y-6">
@@ -182,6 +194,26 @@ export default function DashboardPage() {
           <DonutChart data={stats.byAcademicLevel} />
         </ChartCard>
       </div>
+
+      {/* Visiting Teachers analytics */}
+      {hasVisiting && (
+        <div>
+          <h2 className="mb-3 font-display text-2xl text-emerald-deep dark:text-white">
+            Visiting Teachers
+          </h2>
+          <div className="grid gap-5 lg:grid-cols-3">
+            <ChartCard title="By Course">
+              <BarsChart data={visitingCourseData} color="#16788F" />
+            </ChartCard>
+            <ChartCard title="By Status">
+              <DonutChart data={visitingStatusData} />
+            </ChartCard>
+            <ChartCard title="By Department">
+              <DonutChart data={stats.visitingByDepartment} />
+            </ChartCard>
+          </div>
+        </div>
+      )}
 
       {/* Tables */}
       <MiniTable
