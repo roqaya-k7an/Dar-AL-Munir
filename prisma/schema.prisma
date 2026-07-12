@@ -123,9 +123,10 @@ model UploadedFile {
   id            String   @id @default(cuid())
   label         String   // e.g. "University ID Card", "CV / Resume"
   originalName  String
-  storedName    String   // filename on disk (or storage key)
+  storedName    String   // reference name (kept for traceability)
   mimeType      String
   size          Int
+  data          Bytes    // file contents stored in the database (portable across hosts)
   createdAt     DateTime @default(now())
 
   studentId     String?

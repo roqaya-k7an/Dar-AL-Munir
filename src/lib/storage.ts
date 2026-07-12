@@ -1,28 +1,21 @@
-import { promises as fs } from "fs";
 import path from "path";
 import crypto from "crypto";
-import {
-  ACCEPTED_MIME,
-  ACCEPTED_EXT,
-  MAX_UPLOAD_BYTES,
-} from "./constants";
+import { ACCEPTED_MIME, ACCEPTED_EXT, MAX_UPLOAD_BYTES } from "./constants";
 
 /**
- * File storage adapter.
+ * File handling.
  *
- * Development default: local disk under UPLOAD_DIR (gitignored).
- * Production: swap `saveFile`/`readFile` for a Supabase Storage adapter
- * (see README → "Switching to Supabase Storage"). The public surface of this
- * module stays identical so callers do not change.
+ * Uploaded files are stored as bytes inside the database (UploadedFile.data).
+ * This keeps the app fully portable — it deploys to any host (Vercel, Render,
+ * Fly, …) with only a database and no separate object-storage service.
  */
-
-const UPLOAD_DIR = path.resolve(process.env.UPLOAD_DIR || "./uploads");
 
 export interface SavedFile {
   storedName: string;
   originalName: string;
   mimeType: string;
   size: number;
+  data: Buffer;
 }
 
 export function validateFile(file: File): string | null {
@@ -40,28 +33,15 @@ export async function saveFile(file: File): Promise<SavedFile> {
   const err = validateFile(file);
   if (err) throw new Error(err);
 
-  await fs.mkdir(UPLOAD_DIR, { recursive: true });
-
   const ext = path.extname(file.name).toLowerCase() || ".bin";
   const storedName = `${Date.now()}-${crypto.randomBytes(8).toString("hex")}${ext}`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  await fs.writeFile(path.join(UPLOAD_DIR, storedName), buffer);
+  const data = Buffer.from(await file.arrayBuffer());
 
   return {
     storedName,
     originalName: path.basename(file.name).slice(0, 200),
     mimeType: file.type || "application/octet-stream",
     size: file.size,
+    data,
   };
-}
-
-export async function readFile(storedName: string): Promise<Buffer> {
-  // Guard against path traversal: only a bare filename is ever accepted.
-  const safe = path.basename(storedName);
-  return fs.readFile(path.join(UPLOAD_DIR, safe));
-}
-
-export async function deleteFile(storedName: string): Promise<void> {
-  const safe = path.basename(storedName);
-  await fs.unlink(path.join(UPLOAD_DIR, safe)).catch(() => {});
 }

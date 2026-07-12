@@ -16,6 +16,13 @@ async function main() {
   });
   console.log(`✔ Admin ready: ${email}`);
 
+  // Demo/sample data is only seeded when explicitly requested (e.g. local dev).
+  // In production leave the site empty. Set SEED_SAMPLES=true to include samples.
+  if (process.env.SEED_SAMPLES !== "true") {
+    console.log("↷ Skipping sample data (set SEED_SAMPLES=true to include it)");
+    return;
+  }
+
   // Sample announcements
   const count = await prisma.announcement.count();
   if (count === 0) {
