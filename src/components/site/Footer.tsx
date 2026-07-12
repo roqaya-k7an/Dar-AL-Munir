@@ -94,7 +94,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container-x flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/60 sm:flex-row">
           <p>
-            © {year} {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Al Muneerah"}.{" "}
+            © {year} {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Muneerah"}.{" "}
             {d.footer.rights}
           </p>
           <p>{d.footer.builtBy}</p>

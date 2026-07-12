@@ -40,7 +40,7 @@ export const dictionary = {
       start: "Start",
     },
     about: {
-      kicker: "About Dar Al Muneerah",
+      kicker: "About Dar Muneerah",
       title: "A reverent home for sacred knowledge",
       lead: "We nurture a calm, student-centered environment where the Qur'an and Islamic sciences are taught with excellence, sincerity, and care.",
       vision: "Vision",

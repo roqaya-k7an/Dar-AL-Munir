@@ -22,7 +22,7 @@ function useBrokenImage() {
  * SVG placeholder only if the file is missing — so dropping the real logos in
  * makes them appear everywhere (navbar, hero, footer, admin) with no code change.
  *
- *   /public/images/dar-logo.png    -> Dar Al Muneerah logo
+ *   /public/images/dar-logo.png    -> Dar Muneerah logo
  *   /public/images/iiui-logo.png   -> IIUI logo
  */
 
@@ -34,7 +34,7 @@ export function DarLogo({ className = "h-10 w-10" }: { className?: string }) {
     <img
       ref={ref}
       src="/images/dar-logo.png"
-      alt="Dar Al Muneerah"
+      alt="Dar Muneerah"
       className={cn("object-contain", className)}
       onError={() => setFailed(true)}
     />
@@ -60,7 +60,7 @@ export function IIUILogo({ className = "h-10 w-10" }: { className?: string }) {
 
 function DarLogoSVG({ className = "h-10 w-10" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="Dar Al Muneerah">
+    <svg viewBox="0 0 64 64" className={className} role="img" aria-label="Dar Muneerah">
       <defs>
         <linearGradient id="dam-book" x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stopColor="#7FBF3F" />

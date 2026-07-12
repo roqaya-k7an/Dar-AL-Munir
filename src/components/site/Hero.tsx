@@ -37,7 +37,7 @@ export function Hero() {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/images/building.jpg"
-              alt="Dar Al Muneerah building"
+              alt="Dar Muneerah building"
               className="h-full w-full object-cover"
               onError={(e) => {
                 const img = e.currentTarget as HTMLImageElement;

@@ -148,7 +148,7 @@ export default function DashboardPage() {
           Overview
         </h1>
         <p className="text-sm text-brand-muted dark:text-white/60">
-          Assalamu alaikum — here is what's happening across Dar Al Muneerah.
+          Assalamu alaikum — here is what's happening across Dar Muneerah.
         </p>
       </div>
 

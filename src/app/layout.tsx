@@ -23,7 +23,7 @@ const notoArabic = Noto_Sans_Arabic({
   display: "swap",
 });
 
-const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Dar Al Muneerah";
+const siteName = process.env.NEXT_PUBLIC_SITE_NAME || "Dar Muneerah";
 
 export const metadata: Metadata = {
   title: {
@@ -31,9 +31,9 @@ export const metadata: Metadata = {
     template: `%s · ${siteName}`,
   },
   description:
-    "Dar Al Muneerah is an Islamic learning center at the International Islamic University Islamabad dedicated to teaching the Qur'an, Tajweed, Hadith, Aqeedah, and the Islamic sciences.",
+    "Dar Muneerah is an Islamic learning center at the International Islamic University Islamabad dedicated to teaching the Qur'an, Tajweed, Hadith, Aqeedah, and the Islamic sciences.",
   keywords: [
-    "Dar Al Muneerah",
+    "Dar Muneerah",
     "IIUI",
     "Quran",
     "Tajweed",
