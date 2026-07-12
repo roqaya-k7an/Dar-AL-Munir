@@ -1,7 +1,6 @@
 import { prisma } from "@/lib/db";
 import { ok, fail, requireAdmin } from "@/lib/api";
 import { APPLICATION_STATUSES } from "@/lib/constants";
-import { deleteFile } from "@/lib/storage";
 import { sanitizeText } from "@/lib/utils";
 
 export const runtime = "nodejs";
@@ -84,16 +83,9 @@ export async function DELETE(_req: Request, { params }: Params) {
   if ("response" in guard) return guard.response;
 
   try {
-    const model = modelFor(params.kind);
-
-    const existing = await (model as any).findUnique({
-      where: { id: params.id },
-      include: { files: true },
-    });
-    if (!existing) return fail("Not found", 404);
-
-    for (const f of existing.files) await deleteFile(f.storedName);
-    await (model as any).delete({ where: { id: params.id } });
+    // Uploaded file rows are removed automatically via the onDelete: Cascade
+    // relation, and their bytes live in those rows.
+    await (modelFor(params.kind) as any).delete({ where: { id: params.id } });
     return ok({ deleted: true });
   } catch {
     return fail("Delete failed", 500);

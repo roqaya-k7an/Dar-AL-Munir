@@ -61,7 +61,19 @@ export async function GET(req: Request) {
       where,
       orderBy: { createdAt: "desc" },
       take,
-      include: { files: true },
+      include: {
+        // Exclude the heavy `data` bytes from list responses.
+        files: {
+          select: {
+            id: true,
+            label: true,
+            originalName: true,
+            mimeType: true,
+            size: true,
+            createdAt: true,
+          },
+        },
+      },
     });
     return ok(data);
   } catch {

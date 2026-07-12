@@ -6,12 +6,13 @@ export interface ProcessedFile {
   storedName: string;
   mimeType: string;
   size: number;
+  data: Buffer;
 }
 
 /**
- * Extract and persist any files in a FormData whose key starts with "file:".
- * The label is the remainder of the key, e.g. "file:University ID Card".
- * Returns UploadedFile-shaped records ready for Prisma nested create.
+ * Extract any files in a FormData whose key starts with "file:" and read their
+ * bytes. The label is the remainder of the key, e.g. "file:University ID Card".
+ * Returns UploadedFile-shaped records ready for a Prisma nested create.
  */
 export async function processFormFiles(
   form: FormData,
@@ -30,6 +31,7 @@ export async function processFormFiles(
       storedName: saved.storedName,
       mimeType: saved.mimeType,
       size: saved.size,
+      data: saved.data,
     });
   }
   return results;
