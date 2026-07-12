@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
-import { DarLogo, IIUILogo } from "@/components/ui/Logo";
 import { SocialIcons } from "@/components/ui/Social";
 
 export function Hero() {
@@ -55,15 +54,6 @@ export function Hero() {
 
           <div className="flex min-h-[80vh] flex-col justify-center p-8 sm:p-12 lg:p-16">
             <div className="max-w-2xl">
-              <div className="mb-7 flex items-center gap-3">
-                <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/92 shadow-glass-lg">
-                  <DarLogo className="h-12 w-12" />
-                </div>
-                <div className="grid h-16 w-16 place-items-center rounded-2xl bg-white/92 shadow-glass-lg">
-                  <IIUILogo className="h-12 w-12" />
-                </div>
-              </div>
-
               <span className="text-xs font-bold uppercase tracking-[0.28em] text-leaf/90">
                 {d.hero.badge}
               </span>
