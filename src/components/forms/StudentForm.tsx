@@ -13,10 +13,11 @@ import { FileUpload } from "@/components/ui/FileUpload";
 import { studentSchema, type StudentInput } from "@/lib/validations";
 import {
   COURSES,
-  TAJWEED_LEVELS,
   COMPLETED_LEVELS,
   ACADEMIC_LEVELS,
+  courseSubOptions,
 } from "@/lib/constants";
+import { Info } from "lucide-react";
 
 type FilesState = Record<string, File | null>;
 
@@ -58,7 +59,7 @@ export function StudentForm() {
 
   const course = watch("course");
   const studiedBefore = watch("studiedBefore");
-  const isTajweed = COURSES.find((c) => c.key === course)?.leveled;
+  const subOptions = courseSubOptions(course);
 
   const stepFields: (keyof StudentInput)[][] = [
     ["fullName", "email", "phone", "fatherPhone", "nationality", "nationalId", "registrationNo"],
@@ -184,13 +185,13 @@ export function StudentForm() {
               </Select>
             </Field>
 
-            {isTajweed && (
+            {subOptions && (
               <Field label={d.form.level} error={errors.courseLevel?.message}>
                 <RadioPills
                   name="courseLevel"
                   value={watch("courseLevel") || ""}
                   onChange={(v) => setValue("courseLevel", v)}
-                  options={TAJWEED_LEVELS.map((l) => ({
+                  options={subOptions.map((l) => ({
                     value: l.key,
                     label: lang === "ar" ? l.ar : l.en,
                   }))}
@@ -285,6 +286,11 @@ export function StudentForm() {
           )}
         </div>
       </form>
+
+      <div className="mt-6 flex items-start gap-2 rounded-xl bg-emerald/5 p-3 text-sm text-emerald-deep">
+        <Info className="mt-0.5 h-4 w-4 shrink-0" />
+        {d.student.note}
+      </div>
     </div>
   );
 }

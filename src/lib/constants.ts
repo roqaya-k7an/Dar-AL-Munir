@@ -37,6 +37,20 @@ export const TAJWEED_LEVELS = [
   { key: "advanced", en: "Advance", ar: "المتقدم" },
 ] as const;
 
+// Hifz ul Qur'an sub-programs.
+export const HIFZ_QURAN_TYPES = [
+  { key: "complete", en: "Complete Qur'an", ar: "حفظ القرآن كامل" },
+  { key: "university-syllabus", en: "University Syllabus", ar: "مقرر الجامعة" },
+  { key: "selected-parts", en: "Selected Parts", ar: "الأجزاء المنتخبة" },
+] as const;
+
+// Returns the sub-option list for a course (Tajweed levels / Hifz types), or null.
+export function courseSubOptions(courseKey: string) {
+  if (courseKey === "tajweed") return TAJWEED_LEVELS;
+  if (courseKey === "hifz-quran") return HIFZ_QURAN_TYPES;
+  return null;
+}
+
 // Student — "If yes, how many levels have you completed?"
 export const COMPLETED_LEVELS = [
   { key: "not-studied", en: "I have not studied this course before.", ar: "لم أدرس" },

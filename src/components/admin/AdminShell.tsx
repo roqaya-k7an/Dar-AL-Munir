@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   GraduationCap,
   Users,
+  UserPlus,
   Megaphone,
   LogOut,
   Moon,
@@ -21,7 +22,8 @@ import { cn } from "@/lib/utils";
 const nav = [
   { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/students", label: "Students", icon: GraduationCap },
-  { href: "/admin/instructors", label: "Instructors", icon: Users },
+  { href: "/admin/instructors", label: "Teachers", icon: Users },
+  { href: "/admin/visiting", label: "Visiting Teachers", icon: UserPlus },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
 ];
 
@@ -76,7 +78,7 @@ export function AdminShell({
             <DarLogo className="h-8 w-8" />
           </div>
           <div>
-            <p className="font-display text-lg leading-none">Dar Al Muneerah</p>
+            <p className="font-display text-lg leading-none">Dar Muneerah</p>
             <p className="text-xs text-white/50">Admin Console</p>
           </div>
         </div>

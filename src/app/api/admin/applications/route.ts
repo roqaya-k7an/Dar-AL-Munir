@@ -36,28 +36,28 @@ export async function GET(req: Request) {
       { fullName: { contains: q } },
       { email: { contains: q } },
       { phone: { contains: q } },
-      { nationality: { contains: q } },
       { department: { contains: q } },
     ];
     if (kind === "student") {
+      where.OR.push({ nationality: { contains: q } });
       where.OR.push({ registrationNo: { contains: q } });
       where.OR.push({ universityId: { contains: q } });
-    } else {
+    } else if (kind === "instructor") {
+      where.OR.push({ nationality: { contains: q } });
       where.OR.push({ employeeNo: { contains: q } });
     }
   }
+  // Visiting teachers have no nationality column.
+  if (kind === "visiting" && nationality) delete where.nationality;
 
   try {
-    if (kind === "instructor") {
-      const data = await prisma.instructorApplication.findMany({
-        where,
-        orderBy: { createdAt: "desc" },
-        take,
-        include: { files: true },
-      });
-      return ok(data);
-    }
-    const data = await prisma.studentApplication.findMany({
+    const model =
+      kind === "instructor"
+        ? prisma.instructorApplication
+        : kind === "visiting"
+          ? prisma.visitingTeacherApplication
+          : prisma.studentApplication;
+    const data = await (model as any).findMany({
       where,
       orderBy: { createdAt: "desc" },
       take,

@@ -97,6 +97,28 @@ model InstructorApplication {
   @@index([createdAt])
 }
 
+model VisitingTeacherApplication {
+  id             String            @id @default(cuid())
+  fullName       String
+  phone          String
+  email          String
+  department     String?
+  course         String
+  preferredTime  String?
+  preferredDate  String?
+  daysCount      String?
+  status         String            @default("PENDING")
+  notes          String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  files          UploadedFile[]
+
+  @@index([status])
+  @@index([course])
+  @@index([createdAt])
+}
+
 model UploadedFile {
   id            String   @id @default(cuid())
   label         String   // e.g. "University ID Card", "CV / Resume"
@@ -110,9 +132,12 @@ model UploadedFile {
   student       StudentApplication?    @relation(fields: [studentId], references: [id], onDelete: Cascade)
   instructorId  String?
   instructor    InstructorApplication? @relation(fields: [instructorId], references: [id], onDelete: Cascade)
+  visitingId    String?
+  visiting      VisitingTeacherApplication? @relation(fields: [visitingId], references: [id], onDelete: Cascade)
 
   @@index([studentId])
   @@index([instructorId])
+  @@index([visitingId])
 }
 
 model Announcement {
