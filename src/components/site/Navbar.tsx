@@ -14,6 +14,7 @@ const links = [
   { href: "/#about", key: "nav.about" },
   { href: "/#courses", key: "nav.courses" },
   { href: "/#teachers", key: "nav.teachers" },
+  { href: "/#gallery", key: "nav.gallery" },
   { href: "/#news", key: "nav.news" },
   { href: "/#contact", key: "nav.contact" },
 ];

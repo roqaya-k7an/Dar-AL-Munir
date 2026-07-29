@@ -4,6 +4,7 @@ import { Hero } from "@/components/site/Hero";
 import { About } from "@/components/site/About";
 import { Courses } from "@/components/site/Courses";
 import { Teachers } from "@/components/site/Teachers";
+import { Gallery } from "@/components/site/Gallery";
 import { News } from "@/components/site/News";
 import { Contact } from "@/components/site/Contact";
 
@@ -16,6 +17,7 @@ export default function HomePage() {
         <About />
         <Courses />
         <Teachers />
+        <Gallery />
         <News />
         <Contact />
       </main>
