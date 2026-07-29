@@ -41,11 +41,11 @@ export const dictionary = {
     },
     about: {
       kicker: "About Dar Muneerah",
-      title: "A reverent home for sacred knowledge",
-      lead: "We nurture a calm, student-centered environment where the Qur'an and Islamic sciences are taught with excellence, sincerity, and care.",
+      title: "About Dar Muneerah",
+      lead: "Dar Muneerah for the memorization of the Qur'an and its sciences was established under the gracious patronage of the President of the International Islamic University Islamabad, Prof. Dr. Ahmad bin Yusuf Al-Duraiwish, and a personal donation from Sheikh Hammoud Al-Dhib, a member of the University's Board of Trustees from the Kingdom of Saudi Arabia — may Allah preserve them. The foundation stone was laid at the Faculty of Usuluddin (Girls' Section) on Wednesday, 1 Sha'ban 1436 AH (20 May 2015). It was named after the mother of the donating Sheikh, to host activities dedicated to the Holy Qur'an and its sciences.",
       vision: "Vision",
       visionText:
-        "To be a leading center of Qur'anic and Islamic learning that shapes upright, knowledgeable, and God-conscious generations.",
+        "To prepare a distinguished Qur'anic generation — in knowledge, character, and conduct.",
       mission: "Mission",
       missionText:
         "To teach the Qur'an, Tajweed, Hadith, Aqeedah, and the Islamic sciences with authenticity, mercy, and academic rigor.",
@@ -249,12 +249,12 @@ export const dictionary = {
       start: "ابدئي",
     },
     about: {
-      kicker: "عن دار منيرة",
-      title: "بيتٌ راقٍ للعلم الشرعي",
-      lead: "نوفّر بيئة هادئة تُعنى بالطالبة، تُدرَّس فيها علوم القرآن والعلوم الإسلامية بإتقانٍ وإخلاصٍ وعناية.",
+      kicker: "التعريف بدار منيرة",
+      title: "التعريف بدار منيرة",
+      lead: "أُنشئت دار منيرة لتحفيظ القرآن وعلومه تحت رعاية سامية من معالي رئيس الجامعة الإسلامية العالمية بإسلام آباد الأستاذ الدكتور أحمد بن يوسف الدريويش، وتبرّعٍ شخصيٍّ من الشيخ حمود الذيب عضو مجلس الأمناء لجامعتنا العريقة من المملكة العربية السعودية — حفظهما الله تعالى. وقد وُضِع حجر الأساس لهذه الدار في كلية أصول الدين بقسم البنات يوم الأربعاء الموافق ١ شعبان ١٤٣٦هـ، ٢٠ مايو ٢٠١٥م. وأُنشئت هذه الدار باسم والدة الشيخ المتبرّع، لتُقام فيها الأنشطة الخاصة بالقرآن الكريم وعلومه.",
       vision: "الرؤية",
       visionText:
-        "أن نكون مركزاً رائداً في تعليم القرآن والعلوم الإسلامية يُخرّج أجيالاً صالحةً عالمةً واعيةً بالله.",
+        "إعداد جيلٍ قرآنيٍّ متميّزٍ علماً وخلقاً وسلوكاً.",
       mission: "الرسالة",
       missionText:
         "تعليم القرآن والتجويد والحديث والعقيدة والعلوم الإسلامية بأصالةٍ ورحمةٍ ودقةٍ علمية.",
