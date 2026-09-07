@@ -63,7 +63,7 @@ export async function POST(req: Request) {
         fatherPhone: v.fatherPhone || null,
         nationality: sanitizeText(v.nationality),
         registrationNo: sanitizeText(v.registrationNo),
-        universityId: sanitizeText(v.universityId),
+        universityId: v.universityId ? sanitizeText(v.universityId) : null,
         department: v.department ? sanitizeText(v.department) : null,
         specialization: v.specialization ? sanitizeText(v.specialization) : null,
         academicLevel: v.academicLevel || null,

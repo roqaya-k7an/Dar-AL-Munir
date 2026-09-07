@@ -4,17 +4,10 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import {
-  CheckCircle2,
-  ArrowLeft,
-  ArrowRight,
-  Send,
-  Info,
-  MessageCircle,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Stepper } from "@/components/ui/Stepper";
+import { SuccessCard } from "@/components/ui/SuccessCard";
 import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
 import { studentSchema, type StudentInput } from "@/lib/validations";
 import {
@@ -23,12 +16,6 @@ import {
   ACADEMIC_LEVELS,
   courseSubOptions,
 } from "@/lib/constants";
-
-// WhatsApp group shown after a successful registration. Configurable via
-// NEXT_PUBLIC_WHATSAPP_URL; falls back to the official channel.
-const WHATSAPP_URL =
-  process.env.NEXT_PUBLIC_WHATSAPP_URL ||
-  "https://whatsapp.com/channel/0029Vb6TTGM1yT27mWXd5h1m";
 
 export function StudentForm() {
   const { d, lang, dir } = useLang();
@@ -63,7 +50,7 @@ export function StudentForm() {
   const subOptions = courseSubOptions(course);
 
   const stepFields: (keyof StudentInput)[][] = [
-    ["fullName", "email", "phone", "fatherPhone", "nationality", "registrationNo", "universityId"],
+    ["fullName", "email", "phone", "fatherPhone", "nationality", "registrationNo"],
     ["department", "specialization", "academicLevel"],
     ["course", "courseLevel", "studiedBefore", "completedLevel", "instituteName"],
   ];
@@ -93,32 +80,7 @@ export function StudentForm() {
   }
 
   if (done) {
-    return (
-      <div className="glass mx-auto max-w-xl rounded-3xl p-10 text-center">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-leaf" />
-        <h2 className="mt-5 font-display text-3xl text-emerald-deep">
-          {d.student.title}
-        </h2>
-        <p className="mt-3 text-brand-muted">{d.form.successStudent}</p>
-
-        <div className="mt-6 rounded-2xl border border-emerald/10 bg-emerald/5 p-5">
-          <p className="text-sm text-emerald-deep">{d.form.whatsappHint}</p>
-          <a
-            href={WHATSAPP_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="btn-accent mt-4 inline-flex"
-          >
-            <MessageCircle className="h-4 w-4" />
-            {d.form.whatsappJoin}
-          </a>
-        </div>
-
-        <Link href="/" className="btn-primary mt-7">
-          {d.nav.home}
-        </Link>
-      </div>
-    );
+    return <SuccessCard title={d.student.title} message={d.form.successStudent} home={d.nav.home} />;
   }
 
   return (
@@ -149,9 +111,6 @@ export function StudentForm() {
             </Field>
             <Field label={d.form.registrationNo} required error={errors.registrationNo?.message}>
               <Input {...register("registrationNo")} />
-            </Field>
-            <Field label={d.form.universityRegNo} required error={errors.universityId?.message}>
-              <Input {...register("universityId")} />
             </Field>
           </div>
         )}

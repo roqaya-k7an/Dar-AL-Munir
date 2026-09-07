@@ -135,10 +135,9 @@ export const dictionary = {
       fatherPhone: "Father's Phone Number",
       nationality: "Nationality",
       nationalId: "National ID / Passport Number",
-      registrationNo: "Registration Number",
+      registrationNo: "University Registration Number",
       employeeNo: "Employee / Registration Number",
       universityId: "University ID Number",
-      universityRegNo: "University Registration Number",
       department: "Department",
       specialization: "Specialization",
       academicLevel: "Current Academic Level",
@@ -174,9 +173,6 @@ export const dictionary = {
         "An application with these details already exists. Please contact us if you believe this is an error.",
       error: "Something went wrong. Please try again.",
       reviewNote: "Please review your details before submitting.",
-      whatsappHint:
-        "Join our WhatsApp group to receive schedules, updates, and further details:",
-      whatsappJoin: "Join the WhatsApp group",
     },
     student: {
       title: "Student Registration",
@@ -349,10 +345,9 @@ export const dictionary = {
       fatherPhone: "رقم هاتف ولي الأمر",
       nationality: "الجنسية",
       nationalId: "رقم الهوية / جواز السفر",
-      registrationNo: "رقم التسجيل",
+      registrationNo: "رقم التسجيل الجامعي",
       employeeNo: "رقم الموظّف / التسجيل",
       universityId: "الرقم الجامعي",
-      universityRegNo: "رقم التسجيل الجامعي",
       department: "القسم",
       specialization: "التخصّص",
       academicLevel: "المستوى الأكاديمي الحالي",
@@ -385,9 +380,6 @@ export const dictionary = {
         "يوجد طلبٌ بهذه البيانات مسبقاً. تواصلي معنا إن كنتِ تعتقدين أن هذا خطأ.",
       error: "حدث خطأٌ ما. يُرجى المحاولة مرة أخرى.",
       reviewNote: "يُرجى مراجعة بياناتك قبل الإرسال.",
-      whatsappHint:
-        "انضمّي إلى مجموعة الواتساب لاستلام المواعيد والمستجدّات والتفاصيل:",
-      whatsappJoin: "انضمّي إلى مجموعة الواتساب",
     },
     student: {
       title: "تسجيل الطالبات",

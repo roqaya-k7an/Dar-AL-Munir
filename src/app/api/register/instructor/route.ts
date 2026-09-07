@@ -57,7 +57,7 @@ export async function POST(req: Request) {
         phone: v.phone,
         nationality: sanitizeText(v.nationality),
         employeeNo: sanitizeText(v.employeeNo),
-        universityId: sanitizeText(v.universityId),
+        universityId: v.universityId ? sanitizeText(v.universityId) : null,
         department: v.department ? sanitizeText(v.department) : null,
         specialization: v.specialization ? sanitizeText(v.specialization) : null,
         academicLevel: v.academicLevel || null,
