@@ -9,6 +9,10 @@ import {
   Library,
   Sparkles,
   PenLine,
+  Languages,
+  Scale,
+  Layers,
+  Mic,
   ArrowUpRight,
   type LucideIcon,
 } from "lucide-react";
@@ -24,6 +28,10 @@ const iconMap: Record<string, LucideIcon> = {
   Library,
   Sparkles,
   PenLine,
+  Languages,
+  Scale,
+  Layers,
+  Mic,
 };
 
 const descriptions: Record<string, { en: string; ar: string }> = {
@@ -55,6 +63,22 @@ const descriptions: Record<string, { en: string; ar: string }> = {
     en: "Detailed explanation and commentary of classical texts.",
     ar: "شرح مفصّل للمتون الكلاسيكية.",
   },
+  "arabic-institute": {
+    en: "Learn the Arabic language — reading, grammar, and comprehension.",
+    ar: "تعلّم اللغة العربية قراءةً وقواعدَ وفهماً.",
+  },
+  fiqh: {
+    en: "Study Islamic jurisprudence and its practical rulings.",
+    ar: "دراسة الفقه الإسلامي وأحكامه العملية.",
+  },
+  comprehensive: {
+    en: "An integrated program covering the core Islamic sciences.",
+    ar: "دورة متكاملة تجمع العلوم الشرعية الأساسية.",
+  },
+  tilawah: {
+    en: "Beautiful, correct recitation of the Holy Qur'an.",
+    ar: "تلاوة القرآن الكريم تلاوةً صحيحةً مُجوَّدة.",
+  },
 };
 
 export function Courses() {
@@ -73,49 +97,68 @@ export function Courses() {
           </p>
         </Reveal>
 
-        <div className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {COURSES.map((c, i) => {
-            const Icon = iconMap[c.icon] || BookMarked;
-            return (
-              <Reveal key={c.key} delay={i * 0.05}>
-                <article className="glass group flex h-full flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-glass-lg">
-                  <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-leaf/20 to-teal/15 text-emerald">
-                    <Icon className="h-7 w-7" />
-                  </div>
-                  <h3 className="font-display text-2xl text-emerald-deep">
-                    {lang === "ar" ? c.ar : c.en}
-                  </h3>
-                  <p className="mt-2 flex-1 text-sm leading-relaxed text-brand-muted">
-                    {lang === "ar"
-                      ? descriptions[c.key].ar
-                      : descriptions[c.key].en}
-                  </p>
-
-                  {courseSubOptions(c.key) && (
-                    <div className="mt-4 flex flex-wrap gap-1.5">
-                      {courseSubOptions(c.key)!.map((lv) => (
-                        <span
-                          key={lv.key}
-                          className="chip bg-leaf/12 text-emerald-deep ring-1 ring-leaf/30"
-                        >
-                          {lang === "ar" ? lv.ar : lv.en}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  <Link
-                    href={`/register/student?course=${c.key}`}
-                    className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-emerald transition group-hover:gap-2"
-                  >
-                    {d.courses.register}
-                    <ArrowUpRight className="h-4 w-4" />
-                  </Link>
-                </article>
+        {(
+          [
+            ["program", d.courses.programsLabel],
+            ["course", d.courses.coursesLabel],
+          ] as const
+        ).map(([group, groupLabel]) => {
+          const items = COURSES.filter((c) => c.group === group);
+          if (items.length === 0) return null;
+          return (
+            <div key={group} className="mt-14">
+              <Reveal>
+                <h3 className="mb-6 flex items-center gap-3 font-display text-2xl text-emerald-deep">
+                  <span className="h-6 w-1.5 rounded-full bg-leaf" />
+                  {groupLabel}
+                </h3>
               </Reveal>
-            );
-          })}
-        </div>
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {items.map((c, i) => {
+                  const Icon = iconMap[c.icon] || BookMarked;
+                  return (
+                    <Reveal key={c.key} delay={i * 0.05}>
+                      <article className="glass group flex h-full flex-col rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-glass-lg">
+                        <div className="mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-leaf/20 to-teal/15 text-emerald">
+                          <Icon className="h-7 w-7" />
+                        </div>
+                        <h3 className="font-display text-2xl text-emerald-deep">
+                          {lang === "ar" ? c.ar : c.en}
+                        </h3>
+                        <p className="mt-2 flex-1 text-sm leading-relaxed text-brand-muted">
+                          {lang === "ar"
+                            ? descriptions[c.key]?.ar
+                            : descriptions[c.key]?.en}
+                        </p>
+
+                        {courseSubOptions(c.key) && (
+                          <div className="mt-4 flex flex-wrap gap-1.5">
+                            {courseSubOptions(c.key)!.map((lv) => (
+                              <span
+                                key={lv.key}
+                                className="chip bg-leaf/12 text-emerald-deep ring-1 ring-leaf/30"
+                              >
+                                {lang === "ar" ? lv.ar : lv.en}
+                              </span>
+                            ))}
+                          </div>
+                        )}
+
+                        <Link
+                          href={`/register/student?course=${c.key}`}
+                          className="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-emerald transition group-hover:gap-2"
+                        >
+                          {d.courses.register}
+                          <ArrowUpRight className="h-4 w-4" />
+                        </Link>
+                      </article>
+                    </Reveal>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

@@ -19,14 +19,20 @@ export const STATUS_META: Record<
 };
 
 // Courses offered — the single source of truth for the whole product.
+// `group` splits the offering into "برامج / Programs" and "دورات / Courses"
+// as shown in the Courses section.
 export const COURSES = [
-  { key: "tajweed", en: "Tajweed", ar: "التجويد", icon: "BookOpenCheck", leveled: true },
-  { key: "hifz-quran", en: "Hifz ul Qur'an", ar: "حفظ القرآن", icon: "BookMarked", leveled: false },
-  { key: "understanding-quran", en: "Understanding Qur'an", ar: "فهم القرآن", icon: "GraduationCap", leveled: false },
-  { key: "hifz-ahadees", en: "Hifz ul Ahadees", ar: "حفظ الأحاديث", icon: "ScrollText", leveled: false },
-  { key: "hifz-mutun", en: "Hifz Mutun", ar: "حفظ المتون", icon: "Library", leveled: false },
-  { key: "aqeedah", en: "Aqeedah", ar: "العقيدة", icon: "Sparkles", leveled: false },
-  { key: "sharh-mutun", en: "Explanation of Mutun", ar: "شرح المتون", icon: "PenLine", leveled: false },
+  { key: "tajweed", en: "Tajweed", ar: "التجويد", icon: "BookOpenCheck", leveled: true, group: "program" },
+  { key: "hifz-quran", en: "Hifz ul Qur'an", ar: "حفظ القرآن", icon: "BookMarked", leveled: false, group: "program" },
+  { key: "understanding-quran", en: "Understanding Qur'an", ar: "فهم القرآن", icon: "GraduationCap", leveled: false, group: "program" },
+  { key: "arabic-institute", en: "Arabic Language Institute", ar: "معهد اللغة العربية", icon: "Languages", leveled: false, group: "program" },
+  { key: "hifz-ahadees", en: "Hifz ul Ahadees", ar: "حفظ الأحاديث", icon: "ScrollText", leveled: false, group: "course" },
+  { key: "hifz-mutun", en: "Hifz Mutun", ar: "حفظ المتون", icon: "Library", leveled: false, group: "course" },
+  { key: "aqeedah", en: "Aqeedah", ar: "العقيدة", icon: "Sparkles", leveled: false, group: "course" },
+  { key: "sharh-mutun", en: "Explanation of Mutun", ar: "شرح المتون", icon: "PenLine", leveled: false, group: "course" },
+  { key: "fiqh", en: "Fiqh", ar: "الفقه", icon: "Scale", leveled: false, group: "course" },
+  { key: "comprehensive", en: "Comprehensive Islamic Studies", ar: "الدورة العلمية الشاملة", icon: "Layers", leveled: false, group: "course" },
+  { key: "tilawah", en: "Tilawah", ar: "التلاوة", icon: "Mic", leveled: false, group: "course" },
 ] as const;
 
 export const COURSE_KEYS = COURSES.map((c) => c.key);

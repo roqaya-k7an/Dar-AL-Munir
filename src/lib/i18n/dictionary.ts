@@ -18,10 +18,11 @@ export const dictionary = {
       admin: "Admin",
     },
     hero: {
-      badge: "Qur'an & Islamic Sciences",
+      badge: "Leadership in teaching the Qur'an and its sciences",
       title: "Dar Muneerah",
       subtitle: "International Islamic University Islamabad",
-      lead: "An Islamic learning center dedicated to teaching the Qur'an, Tajweed, Hadith, Aqeedah, and the Islamic sciences.",
+      lead: "An educational house dedicated to teaching the Holy Qur'an and its sciences.",
+      announce: "Registration is now open — join us today.",
       registerStudent: "Register as Student",
       applyInstructor: "Apply as Instructor",
       learnMore: "Learn More",
@@ -68,6 +69,8 @@ export const dictionary = {
       lead: "From foundational Tajweed to advanced memorization and the study of core texts.",
       register: "Register",
       levels: "Levels",
+      programsLabel: "Programs",
+      coursesLabel: "Courses",
     },
     teachers: {
       kicker: "Our Instructors",
@@ -103,7 +106,7 @@ export const dictionary = {
     },
     footer: {
       tagline:
-        "An Islamic learning center at the International Islamic University Islamabad.",
+        "An educational house dedicated to teaching the Holy Qur'an and its sciences, at the International Islamic University Islamabad.",
       quickLinks: "Quick Links",
       programs: "Programs",
       social: "Connect",
@@ -135,6 +138,7 @@ export const dictionary = {
       registrationNo: "Registration Number",
       employeeNo: "Employee / Registration Number",
       universityId: "University ID Number",
+      universityRegNo: "University Registration Number",
       department: "Department",
       specialization: "Specialization",
       academicLevel: "Current Academic Level",
@@ -170,6 +174,9 @@ export const dictionary = {
         "An application with these details already exists. Please contact us if you believe this is an error.",
       error: "Something went wrong. Please try again.",
       reviewNote: "Please review your details before submitting.",
+      whatsappHint:
+        "Join our WhatsApp group to receive schedules, updates, and further details:",
+      whatsappJoin: "Join the WhatsApp group",
     },
     student: {
       title: "Student Registration",
@@ -227,10 +234,11 @@ export const dictionary = {
       admin: "لوحة التحكم",
     },
     hero: {
-      badge: "القرآن والعلوم الإسلامية",
+      badge: "الريادة في تعليم القرآن وعلومه",
       title: "دار منيرة",
       subtitle: "الجامعة الإسلامية العالمية إسلام آباد",
-      lead: "مركز تعليمي إسلامي مُكرَّس لتعليم القرآن الكريم والتجويد والحديث والعقيدة والعلوم الإسلامية.",
+      lead: "دارٌ تعليمية تُعنى بتعليم القرآن الكريم وعلومه.",
+      announce: "التسجيل مفتوح الآن — سارعي بالانضمام إلينا.",
       registerStudent: "سجّلي كطالبة",
       applyInstructor: "تقدّمي كمعلمة",
       learnMore: "اعرفي المزيد",
@@ -277,6 +285,8 @@ export const dictionary = {
       lead: "من تأسيس التجويد إلى الحفظ المتقدّم ودراسة المتون الأساسية.",
       register: "التسجيل",
       levels: "المستويات",
+      programsLabel: "البرامج",
+      coursesLabel: "الدورات",
     },
     teachers: {
       kicker: "معلماتنا",
@@ -311,7 +321,7 @@ export const dictionary = {
       followUs: "تابعينا",
     },
     footer: {
-      tagline: "مركز تعليمي إسلامي في الجامعة الإسلامية العالمية إسلام آباد.",
+      tagline: "دارٌ تُعنى بتعليم القرآن الكريم وعلومه، في الجامعة الإسلامية العالمية إسلام آباد.",
       quickLinks: "روابط سريعة",
       programs: "البرامج",
       social: "تواصل",
@@ -342,6 +352,7 @@ export const dictionary = {
       registrationNo: "رقم التسجيل",
       employeeNo: "رقم الموظّف / التسجيل",
       universityId: "الرقم الجامعي",
+      universityRegNo: "رقم التسجيل الجامعي",
       department: "القسم",
       specialization: "التخصّص",
       academicLevel: "المستوى الأكاديمي الحالي",
@@ -374,6 +385,9 @@ export const dictionary = {
         "يوجد طلبٌ بهذه البيانات مسبقاً. تواصلي معنا إن كنتِ تعتقدين أن هذا خطأ.",
       error: "حدث خطأٌ ما. يُرجى المحاولة مرة أخرى.",
       reviewNote: "يُرجى مراجعة بياناتك قبل الإرسال.",
+      whatsappHint:
+        "انضمّي إلى مجموعة الواتساب لاستلام المواعيد والمستجدّات والتفاصيل:",
+      whatsappJoin: "انضمّي إلى مجموعة الواتساب",
     },
     student: {
       title: "تسجيل الطالبات",

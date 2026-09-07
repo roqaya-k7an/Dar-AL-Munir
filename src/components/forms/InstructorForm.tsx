@@ -4,7 +4,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { CheckCircle2, ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
+import {
+  CheckCircle2,
+  ArrowLeft,
+  ArrowRight,
+  Send,
+  Info,
+  MessageCircle,
+} from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Stepper } from "@/components/ui/Stepper";
 import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
@@ -21,6 +28,12 @@ import {
 
 type FilesState = Record<string, File | null>;
 
+// WhatsApp group shown after a successful registration. Configurable via
+// NEXT_PUBLIC_WHATSAPP_URL; falls back to the official channel.
+const WHATSAPP_URL =
+  process.env.NEXT_PUBLIC_WHATSAPP_URL ||
+  "https://whatsapp.com/channel/0029Vb6TTGM1yT27mWXd5h1m";
+
 export function InstructorForm() {
   const { d, lang, dir } = useLang();
   const Arrow = dir === "rtl" ? ArrowLeft : ArrowRight;
@@ -36,7 +49,6 @@ export function InstructorForm() {
     d.form.academic,
     d.form.teachingInfo,
     d.form.documents,
-    d.form.review,
   ];
 
   const {
@@ -45,7 +57,6 @@ export function InstructorForm() {
     trigger,
     watch,
     setValue,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<InstructorInput>({
     resolver: zodResolver(instructorSchema),
@@ -58,10 +69,9 @@ export function InstructorForm() {
   const isTajweed = INSTRUCTOR_COURSES.find((c) => c.key === course)?.leveled;
 
   const stepFields: (keyof InstructorInput)[][] = [
-    ["fullName", "email", "phone", "nationality", "nationalId", "employeeNo"],
+    ["fullName", "email", "phone", "nationality", "employeeNo", "universityId"],
     ["department", "specialization", "academicLevel"],
     ["course", "courseLevel", "taughtBefore", "highestLevelTaught", "instituteName", "experienceYears", "teachingMode"],
-    [],
     [],
   ];
 
@@ -98,6 +108,20 @@ export function InstructorForm() {
           {d.instructor.title}
         </h2>
         <p className="mt-3 text-brand-muted">{d.form.successInstructor}</p>
+
+        <div className="mt-6 rounded-2xl border border-emerald/10 bg-emerald/5 p-5">
+          <p className="text-sm text-emerald-deep">{d.form.whatsappHint}</p>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-accent mt-4 inline-flex"
+          >
+            <MessageCircle className="h-4 w-4" />
+            {d.form.whatsappJoin}
+          </a>
+        </div>
+
         <Link href="/" className="btn-primary mt-7">
           {d.nav.home}
         </Link>
@@ -130,11 +154,11 @@ export function InstructorForm() {
             <Field label={d.form.nationality} required error={errors.nationality?.message}>
               <Input {...register("nationality")} />
             </Field>
-            <Field label={d.form.nationalId} required error={errors.nationalId?.message}>
-              <Input {...register("nationalId")} />
-            </Field>
             <Field label={d.form.employeeNo} required error={errors.employeeNo?.message}>
               <Input {...register("employeeNo")} />
+            </Field>
+            <Field label={d.form.universityRegNo} required error={errors.universityId?.message}>
+              <Input {...register("universityId")} />
             </Field>
           </div>
         )}
@@ -245,51 +269,15 @@ export function InstructorForm() {
         )}
 
         {step === 3 && (
-          <div className="grid gap-5 sm:grid-cols-2">
-            <FileUpload
-              label={d.form.uploadUniEmployeeCard}
-              required
-              value={files[d.form.uploadUniEmployeeCard] || null}
-              onChange={setFile(d.form.uploadUniEmployeeCard)}
-            />
+          <div className="grid gap-5">
             <FileUpload
               label={d.form.uploadCv}
               required
               value={files[d.form.uploadCv] || null}
               onChange={setFile(d.form.uploadCv)}
             />
-          </div>
-        )}
-
-        {step === 4 && (
-          <div>
-            <p className="mb-4 text-sm text-brand-muted">{d.form.reviewNote}</p>
-            <div className="grid gap-2 rounded-2xl border border-emerald/10 bg-white/60 p-5 sm:grid-cols-2">
-              {(
-                [
-                  [d.form.fullName, getValues("fullName")],
-                  [d.form.emailAddress, getValues("email")],
-                  [d.form.phoneNumber, getValues("phone")],
-                  [d.form.nationality, getValues("nationality")],
-                  [d.form.employeeNo, getValues("employeeNo")],
-                  [
-                    d.form.selectCourseTeach,
-                    INSTRUCTOR_COURSES.find((c) => c.key === getValues("course"))?.[lang],
-                  ],
-                  [
-                    d.form.experience,
-                    EXPERIENCE_YEARS.find((e) => e.key === getValues("experienceYears"))?.[lang],
-                  ],
-                ] as [string, string | undefined][]
-              ).map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-3 border-b border-emerald/5 py-1.5 text-sm">
-                  <span className="text-brand-muted">{k}</span>
-                  <span className="font-medium text-emerald-deep">{v || "—"}</span>
-                </div>
-              ))}
-            </div>
             {submitError && (
-              <p className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+              <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
                 {submitError}
               </p>
             )}

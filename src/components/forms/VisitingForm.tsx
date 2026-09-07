@@ -4,12 +4,18 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { CheckCircle2, Send, Info } from "lucide-react";
+import { CheckCircle2, Send, Info, MessageCircle } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Field, Input, Select } from "@/components/ui/Field";
 import { FileUpload } from "@/components/ui/FileUpload";
 import { visitingSchema, type VisitingInput } from "@/lib/validations";
 import { COURSES } from "@/lib/constants";
+
+// WhatsApp group shown after a successful registration. Configurable via
+// NEXT_PUBLIC_WHATSAPP_URL; falls back to the official channel.
+const WHATSAPP_URL =
+  process.env.NEXT_PUBLIC_WHATSAPP_URL ||
+  "https://whatsapp.com/channel/0029Vb6TTGM1yT27mWXd5h1m";
 
 export function VisitingForm() {
   const { d, lang } = useLang();
@@ -46,6 +52,20 @@ export function VisitingForm() {
           {d.visiting.title}
         </h2>
         <p className="mt-3 text-brand-muted">{d.visiting.success}</p>
+
+        <div className="mt-6 rounded-2xl border border-emerald/10 bg-emerald/5 p-5">
+          <p className="text-sm text-emerald-deep">{d.form.whatsappHint}</p>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-accent mt-4 inline-flex"
+          >
+            <MessageCircle className="h-4 w-4" />
+            {d.form.whatsappJoin}
+          </a>
+        </div>
+
         <Link href="/" className="btn-primary mt-7">
           {d.nav.home}
         </Link>

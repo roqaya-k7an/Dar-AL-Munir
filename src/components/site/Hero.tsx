@@ -54,7 +54,11 @@ export function Hero() {
 
           <div className="flex min-h-[80vh] flex-col justify-center p-8 sm:p-12 lg:p-16">
             <div className="max-w-2xl">
-              <span className="text-xs font-bold uppercase tracking-[0.28em] text-leaf/90">
+              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-leaf/15 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur">
+                <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-leaf" />
+                {d.hero.announce}
+              </span>
+              <span className="block text-xs font-bold uppercase tracking-[0.28em] text-leaf/90">
                 {d.hero.badge}
               </span>
               <h1 className="mt-3 font-display text-5xl leading-[1.05] text-white sm:text-6xl md:text-7xl">
@@ -71,12 +75,6 @@ export function Hero() {
                 <Link href="/register" className="btn-accent text-base">
                   {d.hero.getStarted}
                   <Arrow className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/#about"
-                  className="btn border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20"
-                >
-                  {d.hero.learnMore}
                 </Link>
               </div>
 

@@ -35,7 +35,6 @@ model StudentApplication {
   phone             String
   fatherPhone       String?
   nationality       String
-  nationalId        String
   registrationNo    String
   universityId      String?
   // Academic
@@ -69,7 +68,6 @@ model InstructorApplication {
   email             String
   phone             String
   nationality       String
-  nationalId        String
   employeeNo        String
   universityId      String?
   department        String?

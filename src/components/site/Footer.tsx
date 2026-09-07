@@ -32,7 +32,6 @@ export function Footer() {
           </h4>
           <ul className="space-y-2 text-sm">
             {[
-              ["/#about", "nav.about"],
               ["/#teachers", "nav.teachers"],
               ["/#news", "nav.news"],
               ["/#contact", "nav.contact"],

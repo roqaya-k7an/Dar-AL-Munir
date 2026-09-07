@@ -36,7 +36,7 @@ export async function PATCH(req: Request, { params }: Params) {
     "email",
     "phone",
     "nationality",
-    "nationalId",
+    "universityId",
     "department",
     "specialization",
     "academicLevel",
