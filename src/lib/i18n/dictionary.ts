@@ -18,7 +18,7 @@ export const dictionary = {
       admin: "Admin",
     },
     hero: {
-      badge: "Leadership in teaching the Qur'an and its sciences",
+      badge: "Excellence and mastery in teaching the Qur'an and its sciences",
       title: "Dar Muneerah",
       subtitle: "International Islamic University Islamabad",
       lead: "An educational house dedicated to teaching the Holy Qur'an and its sciences.",
@@ -173,6 +173,10 @@ export const dictionary = {
         "An application with these details already exists. Please contact us if you believe this is an error.",
       error: "Something went wrong. Please try again.",
       reviewNote: "Please review your details before submitting.",
+      whatsappHint:
+        "A confirmation has been recorded. Join our WhatsApp group for schedules and details:",
+      whatsappJoin: "Join the WhatsApp group",
+      juzLabel: "Parts (Juz') — select the ones you wish to memorize",
     },
     student: {
       title: "Student Registration",
@@ -230,7 +234,7 @@ export const dictionary = {
       admin: "لوحة التحكم",
     },
     hero: {
-      badge: "الريادة في تعليم القرآن وعلومه",
+      badge: "التميّز والإتقان في تعليم القرآن وعلومه",
       title: "دار منيرة",
       subtitle: "الجامعة الإسلامية العالمية إسلام آباد",
       lead: "دارٌ تعليمية تُعنى بتعليم القرآن الكريم وعلومه.",
@@ -380,6 +384,10 @@ export const dictionary = {
         "يوجد طلبٌ بهذه البيانات مسبقاً. تواصلي معنا إن كنتِ تعتقدين أن هذا خطأ.",
       error: "حدث خطأٌ ما. يُرجى المحاولة مرة أخرى.",
       reviewNote: "يُرجى مراجعة بياناتك قبل الإرسال.",
+      whatsappHint:
+        "تم تسجيل طلبك. انضمّي إلى مجموعة الواتساب لمعرفة المواعيد والتفاصيل:",
+      whatsappJoin: "انضمّي إلى مجموعة الواتساب",
+      juzLabel: "الأجزاء — اختاري ما ترغبين بحفظه",
     },
     student: {
       title: "تسجيل الطالبات",

@@ -17,6 +17,7 @@ import {
   ACADEMIC_LEVELS,
   EXPERIENCE_YEARS,
   TEACHING_MODES,
+  WHATSAPP_GROUP_URL,
 } from "@/lib/constants";
 
 type FilesState = Record<string, File | null>;
@@ -88,7 +89,16 @@ export function InstructorForm() {
   }
 
   if (done) {
-    return <SuccessCard title={d.instructor.title} message={d.form.successInstructor} home={d.nav.home} />;
+    return (
+      <SuccessCard
+        title={d.instructor.title}
+        message={d.form.successInstructor}
+        home={d.nav.home}
+        whatsappUrl={WHATSAPP_GROUP_URL}
+        whatsappHint={d.form.whatsappHint}
+        whatsappJoin={d.form.whatsappJoin}
+      />
+    );
   }
 
   const setFile = (label: string) => (f: File | null) =>

@@ -33,6 +33,7 @@ export const studentSchema = z
       errorMap: () => ({ message: "Select a course" }),
     }),
     courseLevel: z.string().max(40).optional().or(z.literal("")),
+    quranParts: z.string().max(120).optional().or(z.literal("")),
     studiedBefore: z.boolean().default(false),
     completedLevel: z.string().max(40).optional().or(z.literal("")),
     instituteName: z.string().max(120).optional().or(z.literal("")),

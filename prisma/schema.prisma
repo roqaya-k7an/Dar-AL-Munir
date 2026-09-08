@@ -44,6 +44,7 @@ model StudentApplication {
   // Course
   course            String
   courseLevel       String?
+  quranParts        String?           // Selected juz' (1-30) for Hifz, comma-separated
   studiedBefore     Boolean           @default(false)
   completedLevel    String?
   instituteName     String?

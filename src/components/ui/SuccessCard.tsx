@@ -2,21 +2,28 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Check } from "lucide-react";
+import { Check, MessageCircle } from "lucide-react";
 
 /**
  * Animated confirmation card shown after a successful registration.
  * The card fades/scales in, the check mark pops with a spring, and two
- * rings ripple outward for a celebratory feel.
+ * rings ripple outward for a celebratory feel. When a WhatsApp group link
+ * is provided it is shown as a call-to-action.
  */
 export function SuccessCard({
   title,
   message,
   home,
+  whatsappUrl,
+  whatsappHint,
+  whatsappJoin,
 }: {
   title: string;
   message: string;
   home: string;
+  whatsappUrl?: string;
+  whatsappHint?: string;
+  whatsappJoin?: string;
 }) {
   return (
     <motion.div
@@ -75,10 +82,32 @@ export function SuccessCard({
         {message}
       </motion.p>
 
+      {whatsappUrl && (
+        <motion.div
+          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ type: "spring", stiffness: 200, damping: 18, delay: 0.7 }}
+          className="mt-6 rounded-2xl border border-emerald/10 bg-emerald/5 p-5"
+        >
+          {whatsappHint && (
+            <p className="text-sm text-emerald-deep">{whatsappHint}</p>
+          )}
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-accent mt-4 inline-flex"
+          >
+            <MessageCircle className="h-4 w-4" />
+            {whatsappJoin}
+          </a>
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.65 }}
+        transition={{ delay: 0.8 }}
       >
         <Link href="/" className="btn-primary mt-7">
           {home}

@@ -31,9 +31,19 @@ export const COURSES = [
   { key: "aqeedah", en: "Aqeedah", ar: "العقيدة", icon: "Sparkles", leveled: false, group: "course" },
   { key: "sharh-mutun", en: "Explanation of Mutun", ar: "شرح المتون", icon: "PenLine", leveled: false, group: "course" },
   { key: "fiqh", en: "Fiqh", ar: "الفقه", icon: "Scale", leveled: false, group: "course" },
-  { key: "comprehensive", en: "Comprehensive Islamic Studies", ar: "الدورة العلمية الشاملة", icon: "Layers", leveled: false, group: "course" },
+  { key: "comprehensive", en: "Al-Maktaba Al-Shamela", ar: "دورة المكتبة الشاملة", icon: "Layers", leveled: false, group: "course" },
   { key: "tilawah", en: "Tilawah", ar: "التلاوة", icon: "Mic", leveled: false, group: "course" },
 ] as const;
+
+// The 30 juz' of the Qur'an — shown as a calendar-style picker when a student
+// chooses Hifz ul Qur'an.
+export const QURAN_JUZ = Array.from({ length: 30 }, (_, i) => i + 1);
+
+// WhatsApp group shown to applicants after a successful registration.
+// Override with NEXT_PUBLIC_WHATSAPP_GROUP_URL if the group link changes.
+export const WHATSAPP_GROUP_URL =
+  process.env.NEXT_PUBLIC_WHATSAPP_GROUP_URL ||
+  "https://chat.whatsapp.com/HhP7hjGGVy9FHfd9DqtWsp?s=cl&p=a&mlu=4&ilr=4";
 
 export const COURSE_KEYS = COURSES.map((c) => c.key);
 

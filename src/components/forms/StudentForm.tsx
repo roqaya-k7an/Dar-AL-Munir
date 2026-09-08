@@ -8,6 +8,7 @@ import { ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Stepper } from "@/components/ui/Stepper";
 import { SuccessCard } from "@/components/ui/SuccessCard";
+import { JuzPicker } from "@/components/ui/JuzPicker";
 import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
 import { studentSchema, type StudentInput } from "@/lib/validations";
 import {
@@ -15,6 +16,7 @@ import {
   COMPLETED_LEVELS,
   ACADEMIC_LEVELS,
   courseSubOptions,
+  WHATSAPP_GROUP_URL,
 } from "@/lib/constants";
 
 export function StudentForm() {
@@ -24,6 +26,7 @@ export function StudentForm() {
   const BackArrow = dir === "rtl" ? ArrowRight : ArrowLeft;
 
   const [step, setStep] = useState(0);
+  const [juz, setJuz] = useState<number[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
@@ -63,7 +66,13 @@ export function StudentForm() {
   async function onSubmit(values: StudentInput) {
     setSubmitError(null);
     const fd = new FormData();
-    fd.append("payload", JSON.stringify(values));
+    fd.append(
+      "payload",
+      JSON.stringify({
+        ...values,
+        quranParts: juz.length ? juz.join(",") : undefined,
+      }),
+    );
 
     const res = await fetch("/api/register/student", {
       method: "POST",
@@ -80,7 +89,16 @@ export function StudentForm() {
   }
 
   if (done) {
-    return <SuccessCard title={d.student.title} message={d.form.successStudent} home={d.nav.home} />;
+    return (
+      <SuccessCard
+        title={d.student.title}
+        message={d.form.successStudent}
+        home={d.nav.home}
+        whatsappUrl={WHATSAPP_GROUP_URL}
+        whatsappHint={d.form.whatsappHint}
+        whatsappJoin={d.form.whatsappJoin}
+      />
+    );
   }
 
   return (
@@ -162,6 +180,12 @@ export function StudentForm() {
                     label: lang === "ar" ? l.ar : l.en,
                   }))}
                 />
+              </Field>
+            )}
+
+            {course === "hifz-quran" && (
+              <Field label={d.form.juzLabel}>
+                <JuzPicker value={juz} onChange={setJuz} />
               </Field>
             )}
 

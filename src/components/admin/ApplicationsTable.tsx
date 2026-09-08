@@ -644,6 +644,7 @@ function DetailDrawer({
           ["Academic Level", rec.academicLevel],
           ["Course", courseLabel(rec.course, "en")],
           ["Course Level", rec.courseLevel],
+          ["Qur'an Parts (Juz')", rec.quranParts],
           ["Studied Before", rec.studiedBefore ? "Yes" : "No"],
           ["Completed Level", rec.completedLevel],
           ["Institute", rec.instituteName],

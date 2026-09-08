@@ -69,6 +69,7 @@ export async function POST(req: Request) {
         academicLevel: v.academicLevel || null,
         course: v.course,
         courseLevel: v.courseLevel || null,
+        quranParts: v.quranParts || null,
         studiedBefore: v.studiedBefore,
         completedLevel: v.completedLevel || null,
         instituteName: v.instituteName ? sanitizeText(v.instituteName) : null,

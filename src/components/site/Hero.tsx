@@ -54,17 +54,31 @@ export function Hero() {
 
           <div className="flex min-h-[80vh] flex-col justify-center p-8 sm:p-12 lg:p-16">
             <div className="max-w-2xl">
-              <span className="mb-5 inline-flex items-center gap-2 rounded-full border border-leaf/40 bg-leaf/15 px-4 py-1.5 text-sm font-semibold text-white backdrop-blur">
-                <span className="inline-block h-2 w-2 animate-pulse rounded-full bg-leaf" />
-                {d.hero.announce}
-              </span>
-              <span className="block text-xs font-bold uppercase tracking-[0.28em] text-leaf/90">
+              <motion.div
+                initial={{ opacity: 0, y: -14, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="mb-5 inline-flex"
+              >
+                <motion.span
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-leaf/50 bg-leaf/25 px-4 py-1.5 text-sm font-semibold text-white shadow-glass ring-1 ring-white/20 backdrop-blur"
+                >
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-leaf" />
+                  </span>
+                  {d.hero.announce}
+                </motion.span>
+              </motion.div>
+              <span className="block text-xs font-bold uppercase tracking-[0.28em] text-white/95">
                 {d.hero.badge}
               </span>
               <h1 className="mt-3 font-display text-5xl leading-[1.05] text-white sm:text-6xl md:text-7xl">
                 {d.hero.title}
               </h1>
-              <p className="mt-3 font-display text-xl text-leaf/90 sm:text-2xl">
+              <p className="mt-3 font-display text-xl text-white/90 sm:text-2xl">
                 {d.hero.subtitle}
               </p>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">

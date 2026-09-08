@@ -72,8 +72,8 @@ const descriptions: Record<string, { en: string; ar: string }> = {
     ar: "دراسة الفقه الإسلامي وأحكامه العملية.",
   },
   comprehensive: {
-    en: "An integrated program covering the core Islamic sciences.",
-    ar: "دورة متكاملة تجمع العلوم الشرعية الأساسية.",
+    en: "Using the Al-Maktaba Al-Shamela digital Islamic library and its references.",
+    ar: "التعرّف على المكتبة الشاملة والإفادة من مصادرها ومراجعها العلمية.",
   },
   tilawah: {
     en: "Beautiful, correct recitation of the Holy Qur'an.",

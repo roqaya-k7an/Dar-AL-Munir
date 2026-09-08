@@ -9,7 +9,7 @@ import { SuccessCard } from "@/components/ui/SuccessCard";
 import { Field, Input, Select } from "@/components/ui/Field";
 import { FileUpload } from "@/components/ui/FileUpload";
 import { visitingSchema, type VisitingInput } from "@/lib/validations";
-import { COURSES } from "@/lib/constants";
+import { COURSES, WHATSAPP_GROUP_URL } from "@/lib/constants";
 
 export function VisitingForm() {
   const { d, lang } = useLang();
@@ -39,7 +39,16 @@ export function VisitingForm() {
   }
 
   if (done) {
-    return <SuccessCard title={d.visiting.title} message={d.visiting.success} home={d.nav.home} />;
+    return (
+      <SuccessCard
+        title={d.visiting.title}
+        message={d.visiting.success}
+        home={d.nav.home}
+        whatsappUrl={WHATSAPP_GROUP_URL}
+        whatsappHint={d.form.whatsappHint}
+        whatsappJoin={d.form.whatsappJoin}
+      />
+    );
   }
 
   return (
