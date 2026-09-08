@@ -63,26 +63,25 @@ function DarLogoSVG({ className = "h-10 w-10" }: { className?: string }) {
   // crescent, the word "الله" inside, over an open book with green/blue pages.
   return (
     <svg viewBox="0 0 64 64" className={className} role="img" aria-label="Dar Al Muneerah">
-      <rect width="64" height="64" rx="14" fill="#ffffff" />
       {/* Crescent finial */}
       <path
-        d="M32 6c-2.4 1.2-2.4 5.6 0 6.8-3.4-.2-3.4-6.6 0-6.8z"
+        d="M32 5c-3 1.4-3 6.8 0 8.2-4.2-.3-4.2-7.9 0-8.2z"
         fill="#14110F"
       />
       {/* Pointed mihrab arch */}
       <path
-        d="M18 40V33c0-8 6-14 14-16 8 2 14 8 14 16v7"
+        d="M16 42V33c0-9 7-15.5 16-17.5 9 2 16 8.5 16 17.5v9"
         fill="none"
         stroke="#14110F"
-        strokeWidth="2.4"
+        strokeWidth="3.2"
         strokeLinecap="round"
       />
       {/* "Allah" calligraphy inside the arch */}
       <text
         x="32"
-        y="35"
+        y="37"
         textAnchor="middle"
-        fontSize="15"
+        fontSize="17"
         fontWeight="700"
         fill="#14110F"
         fontFamily="'Amiri','Traditional Arabic','Times New Roman',serif"
@@ -90,9 +89,9 @@ function DarLogoSVG({ className = "h-10 w-10" }: { className?: string }) {
         الله
       </text>
       {/* Open book — left page green, right page blue */}
-      <path d="M32 55V45c-4-3-11-3.5-17-1.5V52c6-2 13-1.6 17 3z" fill="#7FBF3F" />
-      <path d="M32 55V45c4-3 11-3.5 17-1.5V52c-6-2-13-1.6-17 3z" fill="#16788F" />
-      <path d="M32 45v10" stroke="#ffffff" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M32 57V45c-5-4-13-4.5-19-2V52c7-2.5 15-2 19 4z" fill="#7FBF3F" />
+      <path d="M32 57V45c5-4 13-4.5 19-2V52c-7-2.5-15-2-19 4z" fill="#16788F" />
+      <path d="M32 45v12" stroke="#ffffff" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   );
 }
