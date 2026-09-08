@@ -3,26 +3,22 @@
 import { QURAN_JUZ } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
-/** A decorative Islamic rosette used as the tile background behind the number. */
-function FlowerIcon({ className = "" }: { className?: string }) {
+/** A small open book (mushaf) used as the tile background behind the number. */
+function BookIcon({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 48 48" className={className} fill="none" aria-hidden="true">
-      <g opacity="0.55">
-        {/* 8 petals around the centre */}
-        {Array.from({ length: 8 }).map((_, i) => (
-          <ellipse
-            key={i}
-            cx="24"
-            cy="10"
-            rx="4"
-            ry="9"
-            fill="currentColor"
-            transform={`rotate(${i * 45} 24 24)`}
-          />
-        ))}
+    <svg viewBox="0 0 24 24" className={className} fill="none" aria-hidden="true">
+      <g
+        opacity="0.5"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinejoin="round"
+        strokeLinecap="round"
+      >
+        {/* left page */}
+        <path d="M12 6.5C9.8 5.2 6.4 5.2 4 6v12c2.4-.8 5.8-.8 8 .6" />
+        {/* right page */}
+        <path d="M12 6.5C14.2 5.2 17.6 5.2 20 6v12c-2.4-.8-5.8-.8-8 .6" />
       </g>
-      {/* outer ring + centre */}
-      <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="1.4" opacity="0.35" />
     </svg>
   );
 }
@@ -59,7 +55,7 @@ export function JuzPicker({
                 : "border-emerald/15 bg-white/70 text-emerald-deep hover:border-emerald/40 hover:bg-emerald/5",
             )}
           >
-            <FlowerIcon className="h-5 w-5" />
+            <BookIcon className="h-5 w-5" />
             <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold">
               {n}
             </span>
