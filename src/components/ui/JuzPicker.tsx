@@ -34,7 +34,7 @@ export function JuzPicker({
     );
 
   return (
-    <div className="grid grid-cols-5 gap-2 sm:grid-cols-6">
+    <div className="grid grid-cols-6 gap-1.5 sm:grid-cols-10">
       {QURAN_JUZ.map((n) => {
         const active = value.includes(n);
         return (
@@ -43,15 +43,16 @@ export function JuzPicker({
             type="button"
             onClick={() => toggle(n)}
             aria-pressed={active}
+            title={`${n}`}
             className={cn(
-              "relative flex aspect-[4/5] items-center justify-center rounded-xl border transition-all duration-200",
+              "relative flex aspect-square items-center justify-center rounded-lg border transition-all duration-150",
               active
-                ? "border-emerald bg-emerald text-white shadow-glass -translate-y-0.5"
+                ? "border-emerald bg-emerald text-white shadow-glass"
                 : "border-emerald/15 bg-white/70 text-emerald-deep hover:border-emerald/40 hover:bg-emerald/5",
             )}
           >
-            <MushafIcon className="h-10 w-10" />
-            <span className="absolute inset-0 flex items-center justify-center pt-1 text-sm font-extrabold">
+            <MushafIcon className="h-6 w-6 opacity-80" />
+            <span className="absolute inset-0 flex items-center justify-center pt-0.5 text-[11px] font-bold">
               {n}
             </span>
           </button>

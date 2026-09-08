@@ -169,7 +169,7 @@ export function StudentForm() {
               </Select>
             </Field>
 
-            {subOptions && (
+            {subOptions && course !== "hifz-quran" && (
               <Field label={d.form.level} error={errors.courseLevel?.message}>
                 <RadioPills
                   name="courseLevel"
