@@ -42,7 +42,7 @@ export function JuzPicker({
     );
 
   return (
-    <div className="grid grid-cols-6 gap-1.5 sm:grid-cols-10">
+    <div className="grid w-full max-w-[360px] grid-cols-7 gap-1">
       {QURAN_JUZ.map((n) => {
         const active = value.includes(n);
         return (
@@ -53,14 +53,14 @@ export function JuzPicker({
             aria-pressed={active}
             title={`${n}`}
             className={cn(
-              "relative flex aspect-square items-center justify-center rounded-lg border transition-all duration-150",
+              "relative flex aspect-square items-center justify-center rounded-md border transition-all duration-150",
               active
                 ? "border-emerald bg-emerald text-white shadow-glass"
                 : "border-emerald/15 bg-white/70 text-emerald-deep hover:border-emerald/40 hover:bg-emerald/5",
             )}
           >
-            <FlowerIcon className="h-8 w-8" />
-            <span className="absolute inset-0 flex items-center justify-center text-[12px] font-extrabold">
+            <FlowerIcon className="h-5 w-5" />
+            <span className="absolute inset-0 flex items-center justify-center text-[10px] font-bold">
               {n}
             </span>
           </button>
