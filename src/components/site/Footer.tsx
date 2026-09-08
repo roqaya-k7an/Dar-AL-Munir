@@ -73,12 +73,10 @@ export function Footer() {
             {d.footer.social}
           </h4>
           <ul className="space-y-2 text-sm text-white/70">
-            {process.env.NEXT_PUBLIC_CONTACT_PHONE && (
-              <li>{process.env.NEXT_PUBLIC_CONTACT_PHONE}</li>
-            )}
-            {process.env.NEXT_PUBLIC_CONTACT_EMAIL && (
-              <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
-            )}
+            <li>{process.env.NEXT_PUBLIC_CONTACT_PHONE || "+92 51 9019082"}</li>
+            <li>
+              {process.env.NEXT_PUBLIC_CONTACT_EMAIL || "dar.muneera@iiu.edu.pk"}
+            </li>
             <li>{d.contact.addressValue}</li>
           </ul>
           <Link
@@ -93,7 +91,7 @@ export function Footer() {
       <div className="border-t border-white/10">
         <div className="container-x flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/60 sm:flex-row">
           <p>
-            © {year} {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Al Muneerah"}.{" "}
+            © {year} {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Muneerah"}.{" "}
             {d.footer.rights}
           </p>
           <p>{d.footer.builtBy}</p>

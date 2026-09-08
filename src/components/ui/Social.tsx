@@ -11,7 +11,8 @@ const fb =
 const wa =
   process.env.NEXT_PUBLIC_WHATSAPP_URL ||
   "https://whatsapp.com/channel/0029Vb6TTGM1yT27mWXd5h1m";
-const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "";
+const email =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "dar.muneera@iiu.edu.pk";
 
 export function SocialIcons({
   variant = "light",

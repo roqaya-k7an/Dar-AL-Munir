@@ -156,6 +156,20 @@ model Announcement {
   @@index([createdAt])
 }
 
+model GalleryItem {
+  id        String   @id @default(cuid())
+  titleEn   String
+  titleAr   String
+  mimeType  String
+  data      Bytes    // image bytes stored in the DB (portable, admin-uploaded)
+  videoUrl  String?  // optional: makes this item a "feature film" with a play button
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([published])
+  @@index([createdAt])
+}
+
 model ContactMessage {
   id        String   @id @default(cuid())
   name      String
