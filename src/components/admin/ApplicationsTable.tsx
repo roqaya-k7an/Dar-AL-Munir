@@ -64,11 +64,13 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
 
   const courseList = kind === "instructor" ? INSTRUCTOR_COURSES : COURSES;
 
-  // Admin-create (Visiting Teacher only) — add an existing teacher directly.
+  // Admin-create — add a teacher (or visiting teacher) record directly.
   const emptyCreate = {
     fullName: "",
     email: "",
     phone: "",
+    nationality: "",
+    employeeNo: "",
     department: "",
     course: "",
     preferredDate: "",
@@ -82,11 +84,13 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
 
-  async function createVisiting(e: React.FormEvent) {
+  async function createRecord(e: React.FormEvent) {
     e.preventDefault();
     setCreateError(null);
     setCreating(true);
-    const res = await fetch("/api/admin/visiting", {
+    const endpoint =
+      kind === "instructor" ? "/api/admin/instructors" : "/api/admin/visiting";
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(createForm),
@@ -235,12 +239,13 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {kind === "visiting" && (
+          {(kind === "visiting" || kind === "instructor") && (
             <button
               onClick={() => setShowCreate((s) => !s)}
               className="btn-primary !py-2 text-sm"
             >
-              <Plus className="h-4 w-4" /> Add Visiting Teacher
+              <Plus className="h-4 w-4" />{" "}
+              {kind === "instructor" ? "Add Teacher" : "Add Visiting Teacher"}
             </button>
           )}
           <button onClick={exportCsv} className="btn-ghost !py-2 text-sm">
@@ -255,10 +260,10 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
         </div>
       </div>
 
-      {/* Admin create (Visiting Teacher) */}
-      {kind === "visiting" && showCreate && (
+      {/* Admin create (Teacher / Visiting Teacher) */}
+      {(kind === "visiting" || kind === "instructor") && showCreate && (
         <form
-          onSubmit={createVisiting}
+          onSubmit={createRecord}
           className="admin-surface grid gap-3 rounded-2xl border border-emerald/10 bg-white/80 p-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           <div>
@@ -289,6 +294,28 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
               required
             />
           </div>
+          {kind === "instructor" && (
+            <>
+              <div>
+                <label className="field-label">Nationality *</label>
+                <input
+                  className="field-input"
+                  value={createForm.nationality}
+                  onChange={(e) => setCreateForm({ ...createForm, nationality: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">Employee / Registration No *</label>
+                <input
+                  className="field-input"
+                  value={createForm.employeeNo}
+                  onChange={(e) => setCreateForm({ ...createForm, employeeNo: e.target.value })}
+                  required
+                />
+              </div>
+            </>
+          )}
           <div>
             <label className="field-label">Department</label>
             <input
@@ -306,7 +333,7 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
               required
             >
               <option value="">Select…</option>
-              {COURSES.map((c) => (
+              {courseList.map((c) => (
                 <option key={c.key} value={c.key}>
                   {c.en}
                 </option>
@@ -327,34 +354,38 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
               ))}
             </select>
           </div>
-          <div>
-            <label className="field-label">Preferred Date</label>
-            <input
-              type="date"
-              className="field-input"
-              value={createForm.preferredDate}
-              onChange={(e) => setCreateForm({ ...createForm, preferredDate: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="field-label">Preferred Time</label>
-            <input
-              type="time"
-              className="field-input"
-              value={createForm.preferredTime}
-              onChange={(e) => setCreateForm({ ...createForm, preferredTime: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="field-label">Number of Days</label>
-            <input
-              type="number"
-              min={1}
-              className="field-input"
-              value={createForm.daysCount}
-              onChange={(e) => setCreateForm({ ...createForm, daysCount: e.target.value })}
-            />
-          </div>
+          {kind === "visiting" && (
+            <>
+              <div>
+                <label className="field-label">Preferred Date</label>
+                <input
+                  type="date"
+                  className="field-input"
+                  value={createForm.preferredDate}
+                  onChange={(e) => setCreateForm({ ...createForm, preferredDate: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="field-label">Preferred Time</label>
+                <input
+                  type="time"
+                  className="field-input"
+                  value={createForm.preferredTime}
+                  onChange={(e) => setCreateForm({ ...createForm, preferredTime: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="field-label">Number of Days</label>
+                <input
+                  type="number"
+                  min={1}
+                  className="field-input"
+                  value={createForm.daysCount}
+                  onChange={(e) => setCreateForm({ ...createForm, daysCount: e.target.value })}
+                />
+              </div>
+            </>
+          )}
           <div className="sm:col-span-2 lg:col-span-3">
             <label className="field-label">Notes</label>
             <textarea
