@@ -496,9 +496,21 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
                       {r.nationality}
                     </td>
                     <td className="px-5 py-3">
-                      <span className={cn("chip", statusTone[r.status])}>
-                        {STATUS_META[r.status as keyof typeof STATUS_META]?.en || r.status}
-                      </span>
+                      <select
+                        value={r.status}
+                        onChange={(e) => updateStatus(r.id, e.target.value)}
+                        title="Change status"
+                        className={cn(
+                          "chip cursor-pointer border-0 pe-6 font-semibold outline-none focus:ring-2 focus:ring-emerald/40",
+                          statusTone[r.status],
+                        )}
+                      >
+                        {Object.keys(STATUS_META).map((s) => (
+                          <option key={s} value={s} className="bg-white text-emerald-deep">
+                            {STATUS_META[s as keyof typeof STATUS_META].en}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                     <td className="px-5 py-3 text-brand-muted dark:text-white/70">
                       {formatDate(r.createdAt)}
@@ -509,12 +521,21 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
                       </span>
                     </td>
                     <td className="px-5 py-3 text-right">
-                      <button
-                        onClick={() => setSelected(r)}
-                        className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-emerald hover:bg-emerald/10"
-                      >
-                        <Eye className="h-3.5 w-3.5" /> View
-                      </button>
+                      <div className="inline-flex items-center gap-1">
+                        <button
+                          onClick={() => setSelected(r)}
+                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-emerald hover:bg-emerald/10"
+                        >
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </button>
+                        <button
+                          onClick={() => remove(r.id)}
+                          title="Delete"
+                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
