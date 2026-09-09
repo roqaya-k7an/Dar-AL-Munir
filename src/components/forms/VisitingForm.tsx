@@ -3,13 +3,13 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { CheckCircle2, Send, Info } from "lucide-react";
+import { Send, Info } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
+import { SuccessCard } from "@/components/ui/SuccessCard";
 import { Field, Input, Select } from "@/components/ui/Field";
 import { FileUpload } from "@/components/ui/FileUpload";
 import { visitingSchema, type VisitingInput } from "@/lib/validations";
-import { COURSES } from "@/lib/constants";
+import { COURSES, WHATSAPP_GROUP_URL } from "@/lib/constants";
 
 export function VisitingForm() {
   const { d, lang } = useLang();
@@ -40,16 +40,14 @@ export function VisitingForm() {
 
   if (done) {
     return (
-      <div className="glass mx-auto max-w-xl rounded-3xl p-10 text-center">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-leaf" />
-        <h2 className="mt-5 font-display text-3xl text-emerald-deep">
-          {d.visiting.title}
-        </h2>
-        <p className="mt-3 text-brand-muted">{d.visiting.success}</p>
-        <Link href="/" className="btn-primary mt-7">
-          {d.nav.home}
-        </Link>
-      </div>
+      <SuccessCard
+        title={d.visiting.title}
+        message={d.visiting.success}
+        home={d.nav.home}
+        whatsappUrl={WHATSAPP_GROUP_URL}
+        whatsappHint={d.form.whatsappHint}
+        whatsappJoin={d.form.whatsappJoin}
+      />
     );
   }
 

@@ -1,6 +1,8 @@
 import { prisma } from "@/lib/db";
 import { ok, fail } from "@/lib/api";
 
+export const dynamic = "force-dynamic";
+
 // Public: list published announcements (pinned first, newest first).
 export async function GET() {
   try {

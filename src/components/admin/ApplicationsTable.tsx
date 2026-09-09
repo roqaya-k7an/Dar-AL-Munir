@@ -64,11 +64,13 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
 
   const courseList = kind === "instructor" ? INSTRUCTOR_COURSES : COURSES;
 
-  // Admin-create (Visiting Teacher only) — add an existing teacher directly.
+  // Admin-create — add a teacher (or visiting teacher) record directly.
   const emptyCreate = {
     fullName: "",
     email: "",
     phone: "",
+    nationality: "",
+    employeeNo: "",
     department: "",
     course: "",
     preferredDate: "",
@@ -82,11 +84,13 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
 
-  async function createVisiting(e: React.FormEvent) {
+  async function createRecord(e: React.FormEvent) {
     e.preventDefault();
     setCreateError(null);
     setCreating(true);
-    const res = await fetch("/api/admin/visiting", {
+    const endpoint =
+      kind === "instructor" ? "/api/admin/instructors" : "/api/admin/visiting";
+    const res = await fetch(endpoint, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(createForm),
@@ -187,7 +191,7 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
     doc.setFontSize(16);
     doc.setTextColor(11, 93, 59);
     doc.text(
-      `Dar Al Muneerah — ${kind === "instructor" ? "Instructor" : "Student"} Applications`,
+      `Dar Muneerah — ${kind === "instructor" ? "Instructor" : "Student"} Applications`,
       14,
       16,
     );
@@ -235,12 +239,13 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          {kind === "visiting" && (
+          {(kind === "visiting" || kind === "instructor") && (
             <button
               onClick={() => setShowCreate((s) => !s)}
               className="btn-primary !py-2 text-sm"
             >
-              <Plus className="h-4 w-4" /> Add Visiting Teacher
+              <Plus className="h-4 w-4" />{" "}
+              {kind === "instructor" ? "Add Teacher" : "Add Visiting Teacher"}
             </button>
           )}
           <button onClick={exportCsv} className="btn-ghost !py-2 text-sm">
@@ -255,10 +260,10 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
         </div>
       </div>
 
-      {/* Admin create (Visiting Teacher) */}
-      {kind === "visiting" && showCreate && (
+      {/* Admin create (Teacher / Visiting Teacher) */}
+      {(kind === "visiting" || kind === "instructor") && showCreate && (
         <form
-          onSubmit={createVisiting}
+          onSubmit={createRecord}
           className="admin-surface grid gap-3 rounded-2xl border border-emerald/10 bg-white/80 p-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           <div>
@@ -289,6 +294,28 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
               required
             />
           </div>
+          {kind === "instructor" && (
+            <>
+              <div>
+                <label className="field-label">Nationality *</label>
+                <input
+                  className="field-input"
+                  value={createForm.nationality}
+                  onChange={(e) => setCreateForm({ ...createForm, nationality: e.target.value })}
+                  required
+                />
+              </div>
+              <div>
+                <label className="field-label">Employee / Registration No *</label>
+                <input
+                  className="field-input"
+                  value={createForm.employeeNo}
+                  onChange={(e) => setCreateForm({ ...createForm, employeeNo: e.target.value })}
+                  required
+                />
+              </div>
+            </>
+          )}
           <div>
             <label className="field-label">Department</label>
             <input
@@ -306,7 +333,7 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
               required
             >
               <option value="">Select…</option>
-              {COURSES.map((c) => (
+              {courseList.map((c) => (
                 <option key={c.key} value={c.key}>
                   {c.en}
                 </option>
@@ -327,34 +354,38 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
               ))}
             </select>
           </div>
-          <div>
-            <label className="field-label">Preferred Date</label>
-            <input
-              type="date"
-              className="field-input"
-              value={createForm.preferredDate}
-              onChange={(e) => setCreateForm({ ...createForm, preferredDate: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="field-label">Preferred Time</label>
-            <input
-              type="time"
-              className="field-input"
-              value={createForm.preferredTime}
-              onChange={(e) => setCreateForm({ ...createForm, preferredTime: e.target.value })}
-            />
-          </div>
-          <div>
-            <label className="field-label">Number of Days</label>
-            <input
-              type="number"
-              min={1}
-              className="field-input"
-              value={createForm.daysCount}
-              onChange={(e) => setCreateForm({ ...createForm, daysCount: e.target.value })}
-            />
-          </div>
+          {kind === "visiting" && (
+            <>
+              <div>
+                <label className="field-label">Preferred Date</label>
+                <input
+                  type="date"
+                  className="field-input"
+                  value={createForm.preferredDate}
+                  onChange={(e) => setCreateForm({ ...createForm, preferredDate: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="field-label">Preferred Time</label>
+                <input
+                  type="time"
+                  className="field-input"
+                  value={createForm.preferredTime}
+                  onChange={(e) => setCreateForm({ ...createForm, preferredTime: e.target.value })}
+                />
+              </div>
+              <div>
+                <label className="field-label">Number of Days</label>
+                <input
+                  type="number"
+                  min={1}
+                  className="field-input"
+                  value={createForm.daysCount}
+                  onChange={(e) => setCreateForm({ ...createForm, daysCount: e.target.value })}
+                />
+              </div>
+            </>
+          )}
           <div className="sm:col-span-2 lg:col-span-3">
             <label className="field-label">Notes</label>
             <textarea
@@ -496,9 +527,21 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
                       {r.nationality}
                     </td>
                     <td className="px-5 py-3">
-                      <span className={cn("chip", statusTone[r.status])}>
-                        {STATUS_META[r.status as keyof typeof STATUS_META]?.en || r.status}
-                      </span>
+                      <select
+                        value={r.status}
+                        onChange={(e) => updateStatus(r.id, e.target.value)}
+                        title="Change status"
+                        className={cn(
+                          "chip cursor-pointer border-0 pe-6 font-semibold outline-none focus:ring-2 focus:ring-emerald/40",
+                          statusTone[r.status],
+                        )}
+                      >
+                        {Object.keys(STATUS_META).map((s) => (
+                          <option key={s} value={s} className="bg-white text-emerald-deep">
+                            {STATUS_META[s as keyof typeof STATUS_META].en}
+                          </option>
+                        ))}
+                      </select>
                     </td>
                     <td className="px-5 py-3 text-brand-muted dark:text-white/70">
                       {formatDate(r.createdAt)}
@@ -509,12 +552,21 @@ export function ApplicationsTable({ kind }: { kind: Kind }) {
                       </span>
                     </td>
                     <td className="px-5 py-3 text-right">
-                      <button
-                        onClick={() => setSelected(r)}
-                        className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-emerald hover:bg-emerald/10"
-                      >
-                        <Eye className="h-3.5 w-3.5" /> View
-                      </button>
+                      <div className="inline-flex items-center gap-1">
+                        <button
+                          onClick={() => setSelected(r)}
+                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-emerald hover:bg-emerald/10"
+                        >
+                          <Eye className="h-3.5 w-3.5" /> View
+                        </button>
+                        <button
+                          onClick={() => remove(r.id)}
+                          title="Delete"
+                          className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-semibold text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" /> Delete
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -554,8 +606,7 @@ const EDITABLE: Record<Kind, [string, string][]> = {
     ["phone", "Phone"],
     ["fatherPhone", "Father's Phone"],
     ["nationality", "Nationality"],
-    ["nationalId", "National ID"],
-    ["registrationNo", "Registration No"],
+    ["registrationNo", "University Registration No"],
     ["department", "Department"],
     ["specialization", "Specialization"],
     ["academicLevel", "Academic Level"],
@@ -567,7 +618,6 @@ const EDITABLE: Record<Kind, [string, string][]> = {
     ["email", "Email"],
     ["phone", "Phone"],
     ["nationality", "Nationality"],
-    ["nationalId", "National ID"],
     ["employeeNo", "Employee No"],
     ["department", "Department"],
     ["specialization", "Specialization"],
@@ -640,14 +690,13 @@ function DetailDrawer({
           ["Phone", rec.phone],
           ["Father's Phone", rec.fatherPhone],
           ["Nationality", rec.nationality],
-          ["National ID", rec.nationalId],
-          ["Registration No", rec.registrationNo],
-          ["University ID", rec.universityId],
+          ["University Registration No", rec.registrationNo],
           ["Department", rec.department],
           ["Specialization", rec.specialization],
           ["Academic Level", rec.academicLevel],
           ["Course", courseLabel(rec.course, "en")],
           ["Course Level", rec.courseLevel],
+          ["Qur'an Parts (Juz')", rec.quranParts],
           ["Studied Before", rec.studiedBefore ? "Yes" : "No"],
           ["Completed Level", rec.completedLevel],
           ["Institute", rec.instituteName],
@@ -657,9 +706,7 @@ function DetailDrawer({
           ["Email", rec.email],
           ["Phone", rec.phone],
           ["Nationality", rec.nationality],
-          ["National ID", rec.nationalId],
           ["Employee No", rec.employeeNo],
-          ["University ID", rec.universityId],
           ["Department", rec.department],
           ["Specialization", rec.specialization],
           ["Academic Level", rec.academicLevel],

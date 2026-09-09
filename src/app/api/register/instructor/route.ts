@@ -56,7 +56,6 @@ export async function POST(req: Request) {
         email: v.email.toLowerCase(),
         phone: v.phone,
         nationality: sanitizeText(v.nationality),
-        nationalId: sanitizeText(v.nationalId),
         employeeNo: sanitizeText(v.employeeNo),
         universityId: v.universityId ? sanitizeText(v.universityId) : null,
         department: v.department ? sanitizeText(v.department) : null,

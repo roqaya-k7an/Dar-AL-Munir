@@ -4,22 +4,20 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { CheckCircle2, ArrowLeft, ArrowRight, Send } from "lucide-react";
+import { ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Stepper } from "@/components/ui/Stepper";
+import { SuccessCard } from "@/components/ui/SuccessCard";
+import { JuzPicker } from "@/components/ui/JuzPicker";
 import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
-import { FileUpload } from "@/components/ui/FileUpload";
 import { studentSchema, type StudentInput } from "@/lib/validations";
 import {
   COURSES,
   COMPLETED_LEVELS,
   ACADEMIC_LEVELS,
   courseSubOptions,
+  WHATSAPP_GROUP_URL,
 } from "@/lib/constants";
-import { Info } from "lucide-react";
-
-type FilesState = Record<string, File | null>;
 
 export function StudentForm() {
   const { d, lang, dir } = useLang();
@@ -28,17 +26,11 @@ export function StudentForm() {
   const BackArrow = dir === "rtl" ? ArrowRight : ArrowLeft;
 
   const [step, setStep] = useState(0);
-  const [files, setFiles] = useState<FilesState>({});
+  const [juz, setJuz] = useState<number[]>([]);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [done, setDone] = useState(false);
 
-  const steps = [
-    d.form.personal,
-    d.form.academic,
-    d.form.courseInfo,
-    d.form.documents,
-    d.form.review,
-  ];
+  const steps = [d.form.personal, d.form.academic, d.form.courseInfo];
 
   const {
     register,
@@ -46,7 +38,6 @@ export function StudentForm() {
     trigger,
     watch,
     setValue,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<StudentInput>({
     resolver: zodResolver(studentSchema),
@@ -62,11 +53,9 @@ export function StudentForm() {
   const subOptions = courseSubOptions(course);
 
   const stepFields: (keyof StudentInput)[][] = [
-    ["fullName", "email", "phone", "fatherPhone", "nationality", "nationalId", "registrationNo"],
+    ["fullName", "email", "phone", "fatherPhone", "nationality", "registrationNo"],
     ["department", "specialization", "academicLevel"],
     ["course", "courseLevel", "studiedBefore", "completedLevel", "instituteName"],
-    [],
-    [],
   ];
 
   async function next() {
@@ -77,10 +66,13 @@ export function StudentForm() {
   async function onSubmit(values: StudentInput) {
     setSubmitError(null);
     const fd = new FormData();
-    fd.append("payload", JSON.stringify(values));
-    Object.entries(files).forEach(([label, file]) => {
-      if (file) fd.append(`file:${label}`, file);
-    });
+    fd.append(
+      "payload",
+      JSON.stringify({
+        ...values,
+        quranParts: juz.length ? juz.join(",") : undefined,
+      }),
+    );
 
     const res = await fetch("/api/register/student", {
       method: "POST",
@@ -98,21 +90,16 @@ export function StudentForm() {
 
   if (done) {
     return (
-      <div className="glass mx-auto max-w-xl rounded-3xl p-10 text-center">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-leaf" />
-        <h2 className="mt-5 font-display text-3xl text-emerald-deep">
-          {d.student.title}
-        </h2>
-        <p className="mt-3 text-brand-muted">{d.form.successStudent}</p>
-        <Link href="/" className="btn-primary mt-7">
-          {d.nav.home}
-        </Link>
-      </div>
+      <SuccessCard
+        title={d.student.title}
+        message={d.form.successStudent}
+        home={d.nav.home}
+        whatsappUrl={WHATSAPP_GROUP_URL}
+        whatsappHint={d.form.whatsappHint}
+        whatsappJoin={d.form.whatsappJoin}
+      />
     );
   }
-
-  const setFile = (label: string) => (f: File | null) =>
-    setFiles((prev) => ({ ...prev, [label]: f }));
 
   return (
     <div className="glass rounded-3xl p-6 sm:p-9">
@@ -139,9 +126,6 @@ export function StudentForm() {
             </Field>
             <Field label={d.form.nationality} required error={errors.nationality?.message}>
               <Input {...register("nationality")} />
-            </Field>
-            <Field label={d.form.nationalId} required error={errors.nationalId?.message}>
-              <Input {...register("nationalId")} />
             </Field>
             <Field label={d.form.registrationNo} required error={errors.registrationNo?.message}>
               <Input {...register("registrationNo")} />
@@ -185,7 +169,7 @@ export function StudentForm() {
               </Select>
             </Field>
 
-            {subOptions && (
+            {subOptions && course !== "hifz-quran" && (
               <Field label={d.form.level} error={errors.courseLevel?.message}>
                 <RadioPills
                   name="courseLevel"
@@ -196,6 +180,12 @@ export function StudentForm() {
                     label: lang === "ar" ? l.ar : l.en,
                   }))}
                 />
+              </Field>
+            )}
+
+            {course === "hifz-quran" && (
+              <Field label={d.form.juzLabel}>
+                <JuzPicker value={juz} onChange={setJuz} />
               </Field>
             )}
 
@@ -229,28 +219,9 @@ export function StudentForm() {
                 </Field>
               </>
             )}
-          </div>
-        )}
 
-        {/* Step 4 — Documents */}
-        {step === 3 && (
-          <div className="grid gap-5">
-            <FileUpload
-              label={d.form.uploadUniId}
-              required
-              value={files[d.form.uploadUniId] || null}
-              onChange={setFile(d.form.uploadUniId)}
-            />
-          </div>
-        )}
-
-        {/* Step 5 — Review */}
-        {step === 4 && (
-          <div>
-            <p className="mb-4 text-sm text-brand-muted">{d.form.reviewNote}</p>
-            <ReviewGrid values={getValues()} files={files} lang={lang} d={d} />
             {submitError && (
-              <p className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+              <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
                 {submitError}
               </p>
             )}
@@ -275,11 +246,7 @@ export function StudentForm() {
               <Arrow className="h-4 w-4" />
             </button>
           ) : (
-            <button
-              type="submit"
-              disabled={isSubmitting || !files[d.form.uploadUniId]}
-              className="btn-accent"
-            >
+            <button type="submit" disabled={isSubmitting} className="btn-accent">
               <Send className="h-4 w-4" />
               {isSubmitting ? d.form.submitting : d.form.submit}
             </button>
@@ -291,51 +258,6 @@ export function StudentForm() {
         <Info className="mt-0.5 h-4 w-4 shrink-0" />
         {d.student.note}
       </div>
-    </div>
-  );
-}
-
-function ReviewGrid({
-  values,
-  files,
-  lang,
-  d,
-}: {
-  values: StudentInput;
-  files: Record<string, File | null>;
-  lang: "en" | "ar";
-  d: any;
-}) {
-  const rows: [string, string | undefined][] = [
-    [d.form.fullName, values.fullName],
-    [d.form.emailAddress, values.email],
-    [d.form.phoneNumber, values.phone],
-    [d.form.nationality, values.nationality],
-    [d.form.nationalId, values.nationalId],
-    [d.form.registrationNo, values.registrationNo],
-    [d.form.department, values.department],
-    [
-      d.form.selectCourse,
-      COURSES.find((c) => c.key === values.course)?.[lang],
-    ],
-  ];
-  const fileNames = Object.entries(files)
-    .filter(([, f]) => f)
-    .map(([label, f]) => `${label}: ${f!.name}`);
-
-  return (
-    <div className="grid gap-2 rounded-2xl border border-emerald/10 bg-white/60 p-5 sm:grid-cols-2">
-      {rows.map(([k, v]) => (
-        <div key={k} className="flex justify-between gap-3 border-b border-emerald/5 py-1.5 text-sm">
-          <span className="text-brand-muted">{k}</span>
-          <span className="font-medium text-emerald-deep">{v || "—"}</span>
-        </div>
-      ))}
-      {fileNames.length > 0 && (
-        <div className="sm:col-span-2 pt-2 text-xs text-brand-muted">
-          📎 {fileNames.join(" · ")}
-        </div>
-      )}
     </div>
   );
 }

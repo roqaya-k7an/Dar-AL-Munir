@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { CheckCircle2, ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
+import { ArrowLeft, ArrowRight, Send, Info } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Stepper } from "@/components/ui/Stepper";
+import { SuccessCard } from "@/components/ui/SuccessCard";
 import { Field, Input, Select, RadioPills } from "@/components/ui/Field";
 import { FileUpload } from "@/components/ui/FileUpload";
 import { instructorSchema, type InstructorInput } from "@/lib/validations";
@@ -17,6 +17,7 @@ import {
   ACADEMIC_LEVELS,
   EXPERIENCE_YEARS,
   TEACHING_MODES,
+  WHATSAPP_GROUP_URL,
 } from "@/lib/constants";
 
 type FilesState = Record<string, File | null>;
@@ -36,7 +37,6 @@ export function InstructorForm() {
     d.form.academic,
     d.form.teachingInfo,
     d.form.documents,
-    d.form.review,
   ];
 
   const {
@@ -45,7 +45,6 @@ export function InstructorForm() {
     trigger,
     watch,
     setValue,
-    getValues,
     formState: { errors, isSubmitting },
   } = useForm<InstructorInput>({
     resolver: zodResolver(instructorSchema),
@@ -58,10 +57,9 @@ export function InstructorForm() {
   const isTajweed = INSTRUCTOR_COURSES.find((c) => c.key === course)?.leveled;
 
   const stepFields: (keyof InstructorInput)[][] = [
-    ["fullName", "email", "phone", "nationality", "nationalId", "employeeNo"],
+    ["fullName", "email", "phone", "nationality", "employeeNo"],
     ["department", "specialization", "academicLevel"],
     ["course", "courseLevel", "taughtBefore", "highestLevelTaught", "instituteName", "experienceYears", "teachingMode"],
-    [],
     [],
   ];
 
@@ -92,16 +90,14 @@ export function InstructorForm() {
 
   if (done) {
     return (
-      <div className="glass mx-auto max-w-xl rounded-3xl p-10 text-center">
-        <CheckCircle2 className="mx-auto h-16 w-16 text-leaf" />
-        <h2 className="mt-5 font-display text-3xl text-emerald-deep">
-          {d.instructor.title}
-        </h2>
-        <p className="mt-3 text-brand-muted">{d.form.successInstructor}</p>
-        <Link href="/" className="btn-primary mt-7">
-          {d.nav.home}
-        </Link>
-      </div>
+      <SuccessCard
+        title={d.instructor.title}
+        message={d.form.successInstructor}
+        home={d.nav.home}
+        whatsappUrl={WHATSAPP_GROUP_URL}
+        whatsappHint={d.form.whatsappHint}
+        whatsappJoin={d.form.whatsappJoin}
+      />
     );
   }
 
@@ -129,9 +125,6 @@ export function InstructorForm() {
             </Field>
             <Field label={d.form.nationality} required error={errors.nationality?.message}>
               <Input {...register("nationality")} />
-            </Field>
-            <Field label={d.form.nationalId} required error={errors.nationalId?.message}>
-              <Input {...register("nationalId")} />
             </Field>
             <Field label={d.form.employeeNo} required error={errors.employeeNo?.message}>
               <Input {...register("employeeNo")} />
@@ -245,51 +238,15 @@ export function InstructorForm() {
         )}
 
         {step === 3 && (
-          <div className="grid gap-5 sm:grid-cols-2">
-            <FileUpload
-              label={d.form.uploadUniEmployeeCard}
-              required
-              value={files[d.form.uploadUniEmployeeCard] || null}
-              onChange={setFile(d.form.uploadUniEmployeeCard)}
-            />
+          <div className="grid gap-5">
             <FileUpload
               label={d.form.uploadCv}
               required
               value={files[d.form.uploadCv] || null}
               onChange={setFile(d.form.uploadCv)}
             />
-          </div>
-        )}
-
-        {step === 4 && (
-          <div>
-            <p className="mb-4 text-sm text-brand-muted">{d.form.reviewNote}</p>
-            <div className="grid gap-2 rounded-2xl border border-emerald/10 bg-white/60 p-5 sm:grid-cols-2">
-              {(
-                [
-                  [d.form.fullName, getValues("fullName")],
-                  [d.form.emailAddress, getValues("email")],
-                  [d.form.phoneNumber, getValues("phone")],
-                  [d.form.nationality, getValues("nationality")],
-                  [d.form.employeeNo, getValues("employeeNo")],
-                  [
-                    d.form.selectCourseTeach,
-                    INSTRUCTOR_COURSES.find((c) => c.key === getValues("course"))?.[lang],
-                  ],
-                  [
-                    d.form.experience,
-                    EXPERIENCE_YEARS.find((e) => e.key === getValues("experienceYears"))?.[lang],
-                  ],
-                ] as [string, string | undefined][]
-              ).map(([k, v]) => (
-                <div key={k} className="flex justify-between gap-3 border-b border-emerald/5 py-1.5 text-sm">
-                  <span className="text-brand-muted">{k}</span>
-                  <span className="font-medium text-emerald-deep">{v || "—"}</span>
-                </div>
-              ))}
-            </div>
             {submitError && (
-              <p className="mt-4 rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
+              <p className="rounded-xl bg-rose-50 px-4 py-3 text-sm font-medium text-rose-600">
                 {submitError}
               </p>
             )}

@@ -81,7 +81,7 @@ function LoginInner() {
           </form>
         </div>
         <p className="mt-4 text-center text-xs text-brand-muted">
-          Dar Al Muneerah · IIUI
+          Dar Muneerah · IIUI
         </p>
       </div>
     </div>

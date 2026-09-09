@@ -27,40 +27,52 @@ export function Hero() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="relative isolate overflow-hidden rounded-[28px] border border-white/50 shadow-glass-lg"
         >
-          {/* Building photo inside the glass frame (parallax). Drops in
-              /public/images/building.jpg automatically; falls back to the
-              illustrated placeholder until then. */}
+          {/* Building image inside the glass frame (parallax). Uses a CSS
+              background so it ALWAYS shows: your photo at /public/images/
+              building.jpg on top, and the illustrated building.svg beneath as a
+              guaranteed fallback (no photo needed, no JS needed). */}
           <div
-            className="absolute inset-0 -z-10"
-            style={{ transform: `translateY(${y * 0.18}px) scale(1.12)` }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/images/building.jpg"
-              alt="Dar Al Muneerah building"
-              className="h-full w-full object-cover"
-              onError={(e) => {
-                const img = e.currentTarget as HTMLImageElement;
-                if (!img.src.endsWith("building.svg"))
-                  img.src = "/images/building.svg";
-              }}
-            />
-          </div>
+            className="absolute inset-0 -z-10 bg-cover bg-center"
+            style={{
+              transform: `translateY(${y * 0.18}px) scale(1.12)`,
+              backgroundImage:
+                "url(/images/building.jpg), url(/images/building.svg)",
+            }}
+            role="img"
+            aria-label="Dar Muneerah building"
+          />
 
-          {/* Clean diagonal overlay (as in the blueprint cover): dark green on
-              the left for legible text, fading so the building stays crisp on
-              the right. No blur, no texture. */}
-          <div className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(8,58,37,.92)_0%,rgba(11,93,59,.62)_38%,rgba(11,93,59,.24)_64%,rgba(22,120,150,.10)_100%)]" />
+          {/* Diagonal overlay: dark green on the left for legible text, fading
+              so the building stays visible on the right (as in the blueprint). */}
+          <div className="absolute inset-0 -z-10 bg-[linear-gradient(115deg,rgba(8,58,37,.9)_0%,rgba(11,93,59,.55)_40%,rgba(11,93,59,.18)_66%,rgba(22,120,150,.05)_100%)]" />
 
           <div className="flex min-h-[80vh] flex-col justify-center p-8 sm:p-12 lg:p-16">
             <div className="max-w-2xl">
-              <span className="text-xs font-bold uppercase tracking-[0.28em] text-leaf/90">
+              <motion.div
+                initial={{ opacity: 0, y: -14, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={{ delay: 0.25, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                className="mb-5 inline-flex"
+              >
+                <motion.span
+                  animate={{ y: [0, -3, 0] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                  className="inline-flex items-center gap-2 rounded-full border border-leaf/50 bg-leaf/25 px-4 py-1.5 text-sm font-semibold text-white shadow-glass ring-1 ring-white/20 backdrop-blur"
+                >
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-leaf opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-leaf" />
+                  </span>
+                  {d.hero.announce}
+                </motion.span>
+              </motion.div>
+              <span className="block text-xs font-bold uppercase tracking-[0.28em] text-white/95">
                 {d.hero.badge}
               </span>
               <h1 className="mt-3 font-display text-5xl leading-[1.05] text-white sm:text-6xl md:text-7xl">
                 {d.hero.title}
               </h1>
-              <p className="mt-3 font-display text-xl text-leaf/90 sm:text-2xl">
+              <p className="mt-3 font-display text-xl text-white/90 sm:text-2xl">
                 {d.hero.subtitle}
               </p>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-white/85 sm:text-lg">
@@ -71,12 +83,6 @@ export function Hero() {
                 <Link href="/register" className="btn-accent text-base">
                   {d.hero.getStarted}
                   <Arrow className="h-4 w-4" />
-                </Link>
-                <Link
-                  href="/#about"
-                  className="btn border border-white/30 bg-white/10 text-white backdrop-blur hover:bg-white/20"
-                >
-                  {d.hero.learnMore}
                 </Link>
               </div>
 

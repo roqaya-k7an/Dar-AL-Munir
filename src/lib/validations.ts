@@ -24,7 +24,6 @@ export const studentSchema = z
       .optional()
       .or(z.literal("")),
     nationality: z.string().min(2, "Required").max(60),
-    nationalId: z.string().min(3, "Required").max(40),
     registrationNo: z.string().min(2, "Required").max(40),
     universityId: z.string().max(40).optional().or(z.literal("")),
     department: z.string().max(80).optional().or(z.literal("")),
@@ -34,6 +33,7 @@ export const studentSchema = z
       errorMap: () => ({ message: "Select a course" }),
     }),
     courseLevel: z.string().max(40).optional().or(z.literal("")),
+    quranParts: z.string().max(120).optional().or(z.literal("")),
     studiedBefore: z.boolean().default(false),
     completedLevel: z.string().max(40).optional().or(z.literal("")),
     instituteName: z.string().max(120).optional().or(z.literal("")),
@@ -50,7 +50,6 @@ export const instructorSchema = z.object({
   email: z.string().email("Enter a valid email"),
   phone: z.string().regex(phoneRe, "Enter a valid phone number"),
   nationality: z.string().min(2, "Required").max(60),
-  nationalId: z.string().min(3, "Required").max(40),
   employeeNo: z.string().min(2, "Required").max(40),
   universityId: z.string().max(40).optional().or(z.literal("")),
   department: z.string().max(80).optional().or(z.literal("")),
@@ -96,6 +95,24 @@ export const visitingAdminSchema = visitingSchema.extend({
   notes: z.string().max(2000).optional().or(z.literal("")),
 });
 export type VisitingAdminInput = z.infer<typeof visitingAdminSchema>;
+
+// Admin-created teacher (add an existing/known teacher directly, no public form).
+export const instructorAdminSchema = z.object({
+  fullName: z.string().regex(nameRe, "Enter a valid full name"),
+  email: z.string().email("Enter a valid email"),
+  phone: z.string().regex(phoneRe, "Enter a valid phone number"),
+  nationality: z.string().min(2, "Required").max(60),
+  employeeNo: z.string().min(1, "Required").max(40),
+  course: z.enum(instructorCourseKeys, {
+    errorMap: () => ({ message: "Select a course" }),
+  }),
+  department: z.string().max(80).optional().or(z.literal("")),
+  status: z
+    .enum(["PENDING", "APPROVED", "REJECTED", "ARCHIVED"])
+    .default("APPROVED"),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+});
+export type InstructorAdminInput = z.infer<typeof instructorAdminSchema>;
 
 export const contactSchema = z.object({
   name: z.string().min(2, "Required").max(80),

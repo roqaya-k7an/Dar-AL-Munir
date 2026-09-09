@@ -35,7 +35,6 @@ model StudentApplication {
   phone             String
   fatherPhone       String?
   nationality       String
-  nationalId        String
   registrationNo    String
   universityId      String?
   // Academic
@@ -45,6 +44,7 @@ model StudentApplication {
   // Course
   course            String
   courseLevel       String?
+  quranParts        String?           // Selected juz' (1-30) for Hifz, comma-separated
   studiedBefore     Boolean           @default(false)
   completedLevel    String?
   instituteName     String?
@@ -69,7 +69,6 @@ model InstructorApplication {
   email             String
   phone             String
   nationality       String
-  nationalId        String
   employeeNo        String
   universityId      String?
   department        String?
@@ -152,6 +151,20 @@ model Announcement {
   published Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([published])
+  @@index([createdAt])
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  titleEn   String
+  titleAr   String
+  mimeType  String
+  data      Bytes    // image bytes stored in the DB (portable, admin-uploaded)
+  videoUrl  String?  // optional: makes this item a "feature film" with a play button
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
 
   @@index([published])
   @@index([createdAt])

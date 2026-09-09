@@ -11,6 +11,7 @@ export const dictionary = {
       about: "About Us",
       courses: "Courses",
       teachers: "Teachers",
+      gallery: "Gallery",
       student: "Student Registration",
       instructor: "Instructor Registration",
       news: "News",
@@ -18,10 +19,11 @@ export const dictionary = {
       admin: "Admin",
     },
     hero: {
-      badge: "Qur'an & Islamic Sciences",
+      badge: "Excellence and mastery in teaching the Qur'an and its sciences",
       title: "Dar Muneerah",
       subtitle: "International Islamic University Islamabad",
-      lead: "An Islamic learning center dedicated to teaching the Qur'an, Tajweed, Hadith, Aqeedah, and the Islamic sciences.",
+      lead: "An educational house dedicated to teaching the Holy Qur'an and its sciences.",
+      announce: "Registration is now open — join us today.",
       registerStudent: "Register as Student",
       applyInstructor: "Apply as Instructor",
       learnMore: "Learn More",
@@ -40,12 +42,12 @@ export const dictionary = {
       start: "Start",
     },
     about: {
-      kicker: "About Dar Al Muneerah",
-      title: "A reverent home for sacred knowledge",
-      lead: "We nurture a calm, student-centered environment where the Qur'an and Islamic sciences are taught with excellence, sincerity, and care.",
+      kicker: "About Dar Muneerah",
+      title: "About Dar Muneerah",
+      lead: "Dar Muneerah for the memorization of the Qur'an and its sciences was established under the gracious patronage of the President of the International Islamic University Islamabad, Prof. Dr. Ahmad bin Yusuf Al-Duraiwish, and a personal donation from Sheikh Hammoud Al-Dhib, a member of the University's Board of Trustees from the Kingdom of Saudi Arabia — may Allah preserve them. The foundation stone was laid at the Faculty of Usuluddin (Girls' Section) on Wednesday, 1 Sha'ban 1436 AH (20 May 2015). It was named after the mother of the donating Sheikh, to host activities dedicated to the Holy Qur'an and its sciences.",
       vision: "Vision",
       visionText:
-        "To be a leading center of Qur'anic and Islamic learning that shapes upright, knowledgeable, and God-conscious generations.",
+        "To prepare a distinguished Qur'anic generation — in knowledge, character, and conduct.",
       mission: "Mission",
       missionText:
         "To teach the Qur'an, Tajweed, Hadith, Aqeedah, and the Islamic sciences with authenticity, mercy, and academic rigor.",
@@ -68,6 +70,8 @@ export const dictionary = {
       lead: "From foundational Tajweed to advanced memorization and the study of core texts.",
       register: "Register",
       levels: "Levels",
+      programsLabel: "Programs",
+      coursesLabel: "Courses",
     },
     teachers: {
       kicker: "Our Instructors",
@@ -86,6 +90,14 @@ export const dictionary = {
       empty: "No announcements yet. Please check back soon, in shā’ Allah.",
       readMore: "Read more",
     },
+    gallery: {
+      kicker: "Event Gallery",
+      title: "Moments from Dar Muneerah",
+      lead: "Gatherings, sessions, and events at Dar Muneerah — in collaboration with the International Islamic University Islamabad.",
+      film: "Event Film",
+      watch: "Watch",
+      photos: "Photographs",
+    },
     contact: {
       kicker: "Get in touch",
       title: "Contact Us",
@@ -103,7 +115,7 @@ export const dictionary = {
     },
     footer: {
       tagline:
-        "An Islamic learning center at the International Islamic University Islamabad.",
+        "An educational house dedicated to teaching the Holy Qur'an and its sciences, at the International Islamic University Islamabad.",
       quickLinks: "Quick Links",
       programs: "Programs",
       social: "Connect",
@@ -132,7 +144,7 @@ export const dictionary = {
       fatherPhone: "Father's Phone Number",
       nationality: "Nationality",
       nationalId: "National ID / Passport Number",
-      registrationNo: "Registration Number",
+      registrationNo: "University Registration Number",
       employeeNo: "Employee / Registration Number",
       universityId: "University ID Number",
       department: "Department",
@@ -170,6 +182,10 @@ export const dictionary = {
         "An application with these details already exists. Please contact us if you believe this is an error.",
       error: "Something went wrong. Please try again.",
       reviewNote: "Please review your details before submitting.",
+      whatsappHint:
+        "A confirmation has been recorded. Join our WhatsApp group for schedules and details:",
+      whatsappJoin: "Join the WhatsApp group",
+      juzLabel: "Parts (Juz') — select the ones you wish to memorize",
     },
     student: {
       title: "Student Registration",
@@ -220,6 +236,7 @@ export const dictionary = {
       about: "من نحن",
       courses: "الدورات",
       teachers: "المعلمات",
+      gallery: "المعرض",
       student: "تسجيل الطالبات",
       instructor: "تسجيل المعلمات",
       news: "الأخبار",
@@ -227,10 +244,11 @@ export const dictionary = {
       admin: "لوحة التحكم",
     },
     hero: {
-      badge: "القرآن والعلوم الإسلامية",
+      badge: "التميّز والإتقان في تعليم القرآن وعلومه",
       title: "دار منيرة",
       subtitle: "الجامعة الإسلامية العالمية إسلام آباد",
-      lead: "مركز تعليمي إسلامي مُكرَّس لتعليم القرآن الكريم والتجويد والحديث والعقيدة والعلوم الإسلامية.",
+      lead: "دارٌ تعليمية تُعنى بتعليم القرآن الكريم وعلومه.",
+      announce: "التسجيل مفتوح الآن — سارعي بالانضمام إلينا.",
       registerStudent: "سجّلي كطالبة",
       applyInstructor: "تقدّمي كمعلمة",
       learnMore: "اعرفي المزيد",
@@ -249,12 +267,12 @@ export const dictionary = {
       start: "ابدئي",
     },
     about: {
-      kicker: "عن دار منيرة",
-      title: "بيتٌ راقٍ للعلم الشرعي",
-      lead: "نوفّر بيئة هادئة تُعنى بالطالبة، تُدرَّس فيها علوم القرآن والعلوم الإسلامية بإتقانٍ وإخلاصٍ وعناية.",
+      kicker: "التعريف بدار منيرة",
+      title: "التعريف بدار منيرة",
+      lead: "أُنشئت دار منيرة لتحفيظ القرآن وعلومه تحت رعاية سامية من معالي رئيس الجامعة الإسلامية العالمية بإسلام آباد الأستاذ الدكتور أحمد بن يوسف الدريويش، وتبرّعٍ شخصيٍّ من الشيخ حمود الذيب عضو مجلس الأمناء لجامعتنا العريقة من المملكة العربية السعودية — حفظهما الله تعالى. وقد وُضِع حجر الأساس لهذه الدار في كلية أصول الدين بقسم البنات يوم الأربعاء الموافق ١ شعبان ١٤٣٦هـ، ٢٠ مايو ٢٠١٥م. وأُنشئت هذه الدار باسم والدة الشيخ المتبرّع، لتُقام فيها الأنشطة الخاصة بالقرآن الكريم وعلومه.",
       vision: "الرؤية",
       visionText:
-        "أن نكون مركزاً رائداً في تعليم القرآن والعلوم الإسلامية يُخرّج أجيالاً صالحةً عالمةً واعيةً بالله.",
+        "إعداد جيلٍ قرآنيٍّ متميّزٍ علماً وخلقاً وسلوكاً.",
       mission: "الرسالة",
       missionText:
         "تعليم القرآن والتجويد والحديث والعقيدة والعلوم الإسلامية بأصالةٍ ورحمةٍ ودقةٍ علمية.",
@@ -277,6 +295,8 @@ export const dictionary = {
       lead: "من تأسيس التجويد إلى الحفظ المتقدّم ودراسة المتون الأساسية.",
       register: "التسجيل",
       levels: "المستويات",
+      programsLabel: "البرامج",
+      coursesLabel: "الدورات",
     },
     teachers: {
       kicker: "معلماتنا",
@@ -295,6 +315,14 @@ export const dictionary = {
       empty: "لا توجد إعلانات بعد. تفقّدي الصفحة قريباً إن شاء الله.",
       readMore: "اقرئي المزيد",
     },
+    gallery: {
+      kicker: "معرض الفعاليات",
+      title: "لحظات من دار منيرة",
+      lead: "لقاءات ودروس وفعاليات في دار منيرة — بالتعاون مع الجامعة الإسلامية العالمية بإسلام آباد.",
+      film: "فيلم الفعالية",
+      watch: "مشاهدة",
+      photos: "الصور",
+    },
     contact: {
       kicker: "تواصلي معنا",
       title: "اتصلي بنا",
@@ -311,7 +339,7 @@ export const dictionary = {
       followUs: "تابعينا",
     },
     footer: {
-      tagline: "مركز تعليمي إسلامي في الجامعة الإسلامية العالمية إسلام آباد.",
+      tagline: "دارٌ تُعنى بتعليم القرآن الكريم وعلومه، في الجامعة الإسلامية العالمية إسلام آباد.",
       quickLinks: "روابط سريعة",
       programs: "البرامج",
       social: "تواصل",
@@ -339,7 +367,7 @@ export const dictionary = {
       fatherPhone: "رقم هاتف ولي الأمر",
       nationality: "الجنسية",
       nationalId: "رقم الهوية / جواز السفر",
-      registrationNo: "رقم التسجيل",
+      registrationNo: "رقم التسجيل الجامعي",
       employeeNo: "رقم الموظّف / التسجيل",
       universityId: "الرقم الجامعي",
       department: "القسم",
@@ -374,6 +402,10 @@ export const dictionary = {
         "يوجد طلبٌ بهذه البيانات مسبقاً. تواصلي معنا إن كنتِ تعتقدين أن هذا خطأ.",
       error: "حدث خطأٌ ما. يُرجى المحاولة مرة أخرى.",
       reviewNote: "يُرجى مراجعة بياناتك قبل الإرسال.",
+      whatsappHint:
+        "تم تسجيل طلبك. انضمّي إلى مجموعة الواتساب لمعرفة المواعيد والتفاصيل:",
+      whatsappJoin: "انضمّي إلى مجموعة الواتساب",
+      juzLabel: "الأجزاء — اختاري ما ترغبين بحفظه",
     },
     student: {
       title: "تسجيل الطالبات",
