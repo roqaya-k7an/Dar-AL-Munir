@@ -24,16 +24,16 @@ export const studentSchema = z
       .optional()
       .or(z.literal("")),
     nationality: z.string().min(2, "Required").max(60),
-    nationalId: z.string().min(3, "Required").max(40),
     registrationNo: z.string().min(2, "Required").max(40),
     universityId: z.string().max(40).optional().or(z.literal("")),
     department: z.string().max(80).optional().or(z.literal("")),
     specialization: z.string().max(80).optional().or(z.literal("")),
     academicLevel: z.string().max(40).optional().or(z.literal("")),
-    course: z.enum(COURSE_KEYS as [string, ...string[]], {
-      errorMap: () => ({ message: "Select a course" }),
-    }),
+    // Courses are admin-managed now, so accept any non-empty course label.
+    course: z.string().min(1, "Select a course").max(120),
+    courseId: z.string().max(60).optional().or(z.literal("")),
     courseLevel: z.string().max(40).optional().or(z.literal("")),
+    quranParts: z.string().max(120).optional().or(z.literal("")),
     studiedBefore: z.boolean().default(false),
     completedLevel: z.string().max(40).optional().or(z.literal("")),
     instituteName: z.string().max(120).optional().or(z.literal("")),
@@ -50,7 +50,6 @@ export const instructorSchema = z.object({
   email: z.string().email("Enter a valid email"),
   phone: z.string().regex(phoneRe, "Enter a valid phone number"),
   nationality: z.string().min(2, "Required").max(60),
-  nationalId: z.string().min(3, "Required").max(40),
   employeeNo: z.string().min(2, "Required").max(40),
   universityId: z.string().max(40).optional().or(z.literal("")),
   department: z.string().max(80).optional().or(z.literal("")),
@@ -90,12 +89,32 @@ export type VisitingInput = z.infer<typeof visitingSchema>;
 // Admin-created visiting teacher (e.g. adding an existing/previous teacher).
 // CV is not required here, and the admin may set the status.
 export const visitingAdminSchema = visitingSchema.extend({
+  // Admin may pick any course or type a custom one ("Other").
+  course: z.string().min(1, "Select a course").max(80),
   status: z
     .enum(["PENDING", "APPROVED", "REJECTED", "ARCHIVED"])
     .default("APPROVED"),
   notes: z.string().max(2000).optional().or(z.literal("")),
 });
 export type VisitingAdminInput = z.infer<typeof visitingAdminSchema>;
+
+// Admin-created teacher (add an existing/known teacher directly, no public form).
+export const instructorAdminSchema = z.object({
+  fullName: z.string().regex(nameRe, "Enter a valid full name"),
+  email: z.string().email("Enter a valid email"),
+  phone: z.string().regex(phoneRe, "Enter a valid phone number"),
+  nationality: z.string().min(2, "Required").max(60),
+  employeeNo: z.string().min(1, "Required").max(40),
+  // Admin may pick any course or type a custom one ("Other"), so accept any
+  // non-empty label rather than restricting to a fixed list.
+  course: z.string().min(1, "Select a course").max(80),
+  department: z.string().max(80).optional().or(z.literal("")),
+  status: z
+    .enum(["PENDING", "APPROVED", "REJECTED", "ARCHIVED"])
+    .default("APPROVED"),
+  notes: z.string().max(2000).optional().or(z.literal("")),
+});
+export type InstructorAdminInput = z.infer<typeof instructorAdminSchema>;
 
 export const contactSchema = z.object({
   name: z.string().min(2, "Required").max(80),
@@ -112,12 +131,55 @@ export const loginSchema = z.object({
 export type LoginInput = z.infer<typeof loginSchema>;
 
 export const announcementSchema = z.object({
-  titleEn: z.string().min(2).max(160),
-  titleAr: z.string().min(2).max(160),
-  bodyEn: z.string().min(2).max(4000),
-  bodyAr: z.string().min(2).max(4000),
+  // Titles and bodies are all optional — a single language is enough, and a
+  // picture-only announcement is allowed. The API enforces that at least a
+  // title, some text, or a picture is present.
+  titleEn: z.string().max(160).optional().default(""),
+  titleAr: z.string().max(160).optional().default(""),
+  bodyEn: z.string().max(4000).optional().default(""),
+  bodyAr: z.string().max(4000).optional().default(""),
   category: z.enum(["news", "course", "event", "deadline", "notice"]),
   pinned: z.boolean().default(false),
   published: z.boolean().default(true),
 });
 export type AnnouncementInput = z.infer<typeof announcementSchema>;
+
+// Admin-managed course/program/competition item (shown on the /courses page).
+export const courseItemSchema = z.object({
+  category: z.enum(["program", "course", "competition"]),
+  titleEn: z.string().min(1, "Required").max(120),
+  titleAr: z.string().min(1, "Required").max(120),
+  descEn: z.string().max(600).optional().or(z.literal("")),
+  descAr: z.string().max(600).optional().or(z.literal("")),
+  published: z.boolean().default(true),
+  sortOrder: z.coerce.number().int().min(0).max(9999).optional(),
+});
+export type CourseItemInput = z.infer<typeof courseItemSchema>;
+
+// Admin-controlled registration status per category. A URL, when present, must
+// be an http(s) link (blocks javascript: and other unsafe schemes).
+const registrationUrl = z
+  .union([
+    z.literal(""),
+    z
+      .string()
+      .trim()
+      .max(500)
+      .regex(/^https?:\/\//i, "Link must start with http:// or https://"),
+  ])
+  .optional();
+
+export const registrationStatusSchema = z.object({
+  items: z
+    .array(
+      z.object({
+        id: z.enum(["program", "course", "competition"]),
+        isOpen: z.boolean(),
+        messageEn: z.string().max(300).optional().or(z.literal("")),
+        messageAr: z.string().max(300).optional().or(z.literal("")),
+        url: registrationUrl,
+      }),
+    )
+    .max(3),
+});
+export type RegistrationStatusInput = z.infer<typeof registrationStatusSchema>;

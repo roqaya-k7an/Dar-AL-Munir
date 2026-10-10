@@ -33,8 +33,16 @@ export function Contact() {
   }
 
   const info = [
-    { icon: Phone, label: d.contact.phone, value: process.env.NEXT_PUBLIC_CONTACT_PHONE },
-    { icon: Mail, label: d.contact.email, value: process.env.NEXT_PUBLIC_CONTACT_EMAIL },
+    {
+      icon: Phone,
+      label: d.contact.phone,
+      value: process.env.NEXT_PUBLIC_CONTACT_PHONE || "+92 51 9019082",
+    },
+    {
+      icon: Mail,
+      label: d.contact.email,
+      value: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "dar.muneera@iiu.edu.pk",
+    },
     { icon: MapPin, label: d.contact.address, value: d.contact.addressValue },
   ].filter((it) => it.value && it.value.trim().length > 0);
 

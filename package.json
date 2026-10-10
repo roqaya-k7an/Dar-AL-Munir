@@ -2,14 +2,14 @@
   "name": "dar-al-muneerah",
   "version": "1.0.0",
   "private": true,
-  "description": "Dar Al Muneerah — International Islamic University Islamabad. Bilingual (AR/EN) Islamic education platform with registration, instructor applications, and an analytics admin dashboard.",
+  "description": "Dar Al Munira — International Islamic University Islamabad. Bilingual (AR/EN) Islamic education platform with registration, instructor applications, and an analytics admin dashboard.",
   "engines": {
     "node": ">=18.18.0"
   },
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "vercel-build": "node scripts/use-postgres.mjs && prisma generate && next build",
+    "vercel-build": "node scripts/use-postgres.mjs && prisma generate && (prisma db push --skip-generate && tsx prisma/seed.ts || echo 'DB setup skipped (already provisioned or temporarily unreachable)') && next build",
     "start": "next start",
     "lint": "next lint",
     "postinstall": "prisma generate",

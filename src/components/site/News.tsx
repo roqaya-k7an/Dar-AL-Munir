@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CalendarDays, Megaphone, Pin } from "lucide-react";
+import { CalendarDays, Megaphone, Pin, Paperclip } from "lucide-react";
 import { useLang } from "@/lib/i18n/provider";
 import { Reveal } from "@/components/ui/Reveal";
 import { formatDate } from "@/lib/utils";
@@ -14,6 +14,9 @@ interface Announcement {
   bodyAr: string;
   category: string;
   pinned: boolean;
+  imageMime?: string | null;
+  fileMime?: string | null;
+  fileName?: string | null;
   createdAt: string;
 }
 
@@ -67,12 +70,39 @@ export function News() {
                     </span>
                     {a.pinned && <Pin className="h-4 w-4 text-leaf" />}
                   </div>
-                  <h3 className="mt-4 font-display text-xl text-emerald-deep">
-                    {lang === "ar" ? a.titleAr : a.titleEn}
-                  </h3>
-                  <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-brand-muted">
-                    {lang === "ar" ? a.bodyAr : a.bodyEn}
-                  </p>
+                  {a.imageMime && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={`/api/announcements/${a.id}/image`}
+                      alt={lang === "ar" ? a.titleAr : a.titleEn}
+                      className="mt-4 w-full rounded-xl object-contain"
+                    />
+                  )}
+                  {(a.titleEn || a.titleAr) && (
+                    <h3 className="mt-4 font-display text-xl text-emerald-deep">
+                      {(lang === "ar" ? a.titleAr : a.titleEn) ||
+                        a.titleEn ||
+                        a.titleAr}
+                    </h3>
+                  )}
+                  {(a.bodyEn || a.bodyAr) && (
+                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-brand-muted">
+                      {(lang === "ar" ? a.bodyAr : a.bodyEn) ||
+                        a.bodyEn ||
+                        a.bodyAr}
+                    </p>
+                  )}
+                  {a.fileMime && (
+                    <a
+                      href={`/api/announcements/${a.id}/file`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-teal hover:underline"
+                    >
+                      <Paperclip className="h-4 w-4" />
+                      {lang === "ar" ? "تحميل الملف" : "Download file"}
+                    </a>
+                  )}
                   <div className="mt-4 flex items-center gap-1.5 text-xs text-brand-muted">
                     <CalendarDays className="h-3.5 w-3.5" />
                     {formatDate(a.createdAt, lang)}

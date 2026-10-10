@@ -1,8 +1,8 @@
 Add your three real brand assets here. The app uses them automatically the
 moment these exact filenames exist (until then, illustrated placeholders show):
 
-  building.jpg     ->  Hero cover  (the Dar Al Muneerah building photo)
-  dar-logo.png     ->  Dar Al Muneerah logo  (navbar, hero, footer, admin)
+  building.jpg     ->  Hero cover  (the Dar Al Munira building photo)
+  dar-logo.png     ->  Dar Al Munira logo  (navbar, hero, footer, admin)
   iiui-logo.png    ->  IIUI seal logo        (navbar, hero, footer)
 
 Notes:

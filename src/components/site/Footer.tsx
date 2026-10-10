@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useLang } from "@/lib/i18n/provider";
 import { DarLogo, IIUILogo } from "@/components/ui/Logo";
 import { SocialIcons } from "@/components/ui/Social";
-import { COURSES } from "@/lib/constants";
+import { PROGRAMS } from "@/lib/constants";
 
 export function Footer() {
   const { t, lang, d } = useLang();
@@ -32,7 +32,6 @@ export function Footer() {
           </h4>
           <ul className="space-y-2 text-sm">
             {[
-              ["/#about", "nav.about"],
               ["/#teachers", "nav.teachers"],
               ["/#news", "nav.news"],
               ["/#contact", "nav.contact"],
@@ -56,7 +55,7 @@ export function Footer() {
             {d.footer.programs}
           </h4>
           <ul className="space-y-2 text-sm">
-            {COURSES.map((c) => (
+            {PROGRAMS.map((c) => (
               <li key={c.key}>
                 <Link
                   href="/#courses"
@@ -74,27 +73,19 @@ export function Footer() {
             {d.footer.social}
           </h4>
           <ul className="space-y-2 text-sm text-white/70">
-            {process.env.NEXT_PUBLIC_CONTACT_PHONE && (
-              <li>{process.env.NEXT_PUBLIC_CONTACT_PHONE}</li>
-            )}
-            {process.env.NEXT_PUBLIC_CONTACT_EMAIL && (
-              <li>{process.env.NEXT_PUBLIC_CONTACT_EMAIL}</li>
-            )}
+            <li>{process.env.NEXT_PUBLIC_CONTACT_PHONE || "+92 51 9019082"}</li>
+            <li>
+              {process.env.NEXT_PUBLIC_CONTACT_EMAIL || "dar.muneera@iiu.edu.pk"}
+            </li>
             <li>{d.contact.addressValue}</li>
           </ul>
-          <Link
-            href="/admin/login"
-            className="mt-5 inline-block text-xs text-white/40 transition hover:text-white/70"
-          >
-            {t("nav.admin")} →
-          </Link>
         </div>
       </div>
 
       <div className="border-t border-white/10">
         <div className="container-x flex flex-col items-center justify-between gap-2 py-5 text-xs text-white/60 sm:flex-row">
           <p>
-            © {year} {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Al Muneerah"}.{" "}
+            © {year} {process.env.NEXT_PUBLIC_SITE_NAME || "Dar Munira"}.{" "}
             {d.footer.rights}
           </p>
           <p>{d.footer.builtBy}</p>

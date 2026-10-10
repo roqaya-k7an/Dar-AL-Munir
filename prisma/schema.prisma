@@ -1,10 +1,16 @@
-// Dar Al Muneerah — Prisma schema
+// Dar Al Munira — Prisma schema
 // Default provider is SQLite for zero-config local development.
 // For production, switch `provider` to "postgresql" (Supabase / Postgres)
 // and update DATABASE_URL. The models are portable across both.
 
 generator client {
   provider = "prisma-client-js"
+  // "native" builds the engine for local dev. The rhel-openssl targets are the
+  // AWS Lambda runtimes that Netlify/Vercel serverless functions run on — both
+  // are included so the query engine is always found in production (this avoids
+  // the classic "Query engine library for current platform could not be found"
+  // error). Harmless for local SQLite development.
+  binaryTargets = ["native", "rhel-openssl-1.0.x", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -35,7 +41,6 @@ model StudentApplication {
   phone             String
   fatherPhone       String?
   nationality       String
-  nationalId        String
   registrationNo    String
   universityId      String?
   // Academic
@@ -44,7 +49,9 @@ model StudentApplication {
   academicLevel     String?
   // Course
   course            String
+  courseId          String?           // links to CourseItem when chosen from a card
   courseLevel       String?
+  quranParts        String?           // Selected juz' (1-30) for Hifz, comma-separated
   studiedBefore     Boolean           @default(false)
   completedLevel    String?
   instituteName     String?
@@ -69,7 +76,6 @@ model InstructorApplication {
   email             String
   phone             String
   nationality       String
-  nationalId        String
   employeeNo        String
   universityId      String?
   department        String?
@@ -86,6 +92,10 @@ model InstructorApplication {
   // Meta
   status            String            @default("PENDING")
   notes             String?
+  // Admin-controlled display order for the public Teachers section. Lower comes
+  // first; ties fall back to createdAt. New records get a value past the current
+  // maximum so adding a teacher never reshuffles the existing order.
+  sortOrder         Int               @default(0)
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
 
@@ -95,6 +105,7 @@ model InstructorApplication {
   @@index([course])
   @@index([nationality])
   @@index([createdAt])
+  @@index([sortOrder])
 }
 
 model VisitingTeacherApplication {
@@ -150,11 +161,50 @@ model Announcement {
   category  String   @default("news") // news | course | event | deadline | notice
   pinned    Boolean  @default(false)
   published Boolean  @default(true)
+  // Optional picture shown with the announcement (bytes stored in the DB).
+  imageData Bytes?
+  imageMime String?
+  // Optional file attachment (e.g. a PDF) offered for download.
+  fileData  Bytes?
+  fileMime  String?
+  fileName  String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([published])
   @@index([createdAt])
+}
+
+model GalleryItem {
+  id        String   @id @default(cuid())
+  titleEn   String
+  titleAr   String
+  mimeType  String
+  data      Bytes    // image bytes stored in the DB (portable, admin-uploaded)
+  videoUrl  String?  // optional: makes this item a "feature film" with a play button
+  published Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  @@index([published])
+  @@index([createdAt])
+}
+
+// Courses page — admin-managed items grouped into three categories:
+//   program | course | competition
+model CourseItem {
+  id        String   @id @default(cuid())
+  category  String   @default("program") // program | course | competition
+  titleEn   String
+  titleAr   String
+  descEn    String?
+  descAr    String?
+  published Boolean  @default(true)
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([category])
+  @@index([published])
 }
 
 model ContactMessage {
@@ -167,4 +217,15 @@ model ContactMessage {
   createdAt DateTime @default(now())
 
   @@index([handled])
+}
+
+// Admin-controlled registration status per category shown on the Courses page.
+// One row per category — id is "program" | "course" | "competition".
+model RegistrationStatus {
+  id        String   @id // program | course | competition
+  isOpen    Boolean  @default(false)
+  messageEn String?
+  messageAr String?
+  url       String?
+  updatedAt DateTime @updatedAt @default(now())
 }

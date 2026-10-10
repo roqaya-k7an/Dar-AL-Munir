@@ -116,7 +116,7 @@ export default function MessagesPage() {
               <div className="mt-4 flex flex-wrap gap-2">
                 <a
                   href={`mailto:${m.email}?subject=${encodeURIComponent(
-                    "Re: " + (m.subject || "Your message to Dar Muneerah"),
+                    "Re: " + (m.subject || "Your message to Dar Munira"),
                   )}`}
                   className="btn-ghost !py-1.5 text-xs"
                 >

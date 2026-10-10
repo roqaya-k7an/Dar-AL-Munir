@@ -16,6 +16,45 @@ async function main() {
   });
   console.log(`✔ Admin ready: ${email}`);
 
+  // Seed the four default Programs (idempotent). Admins can edit/delete these
+  // and add Courses / Competitions from the admin panel.
+  const programs = [
+    { id: "prog-tajweed", titleEn: "Tajweed", titleAr: "التجويد", descEn: "Master correct Qur'anic recitation across progressive levels.", descAr: "إتقان التلاوة الصحيحة عبر مستويات متدرّجة." },
+    { id: "prog-hifz-quran", titleEn: "Quran Memorization", titleAr: "حفظ القرآن", descEn: "Structured memorization of the Holy Qur'an with revision and tarbiyah.", descAr: "حفظٌ منظّم للقرآن الكريم مع المراجعة والتربية." },
+    { id: "prog-tadabbur", titleEn: "Quran Reflection", titleAr: "تدبر القرآن", descEn: "Reflect on the meanings and guidance of the Qur'an.", descAr: "التدبّر في معاني القرآن الكريم وهداياته." },
+    { id: "prog-tilawah", titleEn: "Quran Recitation", titleAr: "التلاوة", descEn: "Beautiful, correct recitation of the Holy Qur'an.", descAr: "تلاوة القرآن الكريم تلاوةً صحيحةً مُجوَّدة." },
+  ];
+  for (let i = 0; i < programs.length; i++) {
+    const p = programs[i];
+    const fields = {
+      category: "program",
+      titleEn: p.titleEn,
+      titleAr: p.titleAr,
+      descEn: p.descEn,
+      descAr: p.descAr,
+      sortOrder: i,
+    };
+    await prisma.courseItem.upsert({
+      where: { id: p.id },
+      // Keep the four default Programs in sync with the intended labels/order
+      // on every seed (also corrects rows seeded with earlier titles).
+      update: fields,
+      create: { id: p.id, ...fields },
+    });
+  }
+  console.log("✔ Programs ready (Tajweed, Memorization, Reflection, Recitation)");
+
+  // Registration status rows (one per category). Created only if missing so
+  // admin edits are never overwritten on re-seed.
+  for (const id of ["program", "course", "competition"]) {
+    await prisma.registrationStatus.upsert({
+      where: { id },
+      update: {},
+      create: { id, isOpen: false, messageEn: "", messageAr: "", url: "" },
+    });
+  }
+  console.log("✔ Registration status rows ready");
+
   // Demo/sample data is only seeded when explicitly requested (e.g. local dev).
   // In production leave the site empty. Set SEED_SAMPLES=true to include samples.
   if (process.env.SEED_SAMPLES !== "true") {
@@ -69,8 +108,8 @@ async function main() {
           email: "aisha.demo@example.com",
           phone: "+92 300 1112223",
           nationality: "Pakistan",
-          nationalId: "35201-1234567-8",
           registrationNo: "REG-2026-001",
+          universityId: "UNI-2026-001",
           department: "Usuluddin",
           academicLevel: "bs",
           course: "tajweed",
@@ -82,8 +121,8 @@ async function main() {
           email: "fatima.demo@example.com",
           phone: "+20 100 2223334",
           nationality: "Egypt",
-          nationalId: "A1234567",
           registrationNo: "REG-2026-002",
+          universityId: "UNI-2026-002",
           department: "Arabic",
           academicLevel: "ms",
           course: "hifz-quran",
@@ -97,8 +136,8 @@ async function main() {
         email: "maryam.demo@example.com",
         phone: "+92 321 4445556",
         nationality: "Pakistan",
-        nationalId: "35202-7654321-0",
         employeeNo: "EMP-1024",
+        universityId: "UNI-EMP-1024",
         department: "Usuluddin",
         academicLevel: "phd",
         course: "tajweed",

@@ -1,4 +1,4 @@
-# Deploy Dar Muneerah (easiest — Render, one platform)
+# Deploy Dar Munira (easiest — Render, one platform)
 
 The repo includes a `render.yaml` blueprint that creates the database **and** the
 app together and connects them automatically. You only click through and set one

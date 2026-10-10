@@ -19,17 +19,42 @@ export const STATUS_META: Record<
 };
 
 // Courses offered — the single source of truth for the whole product.
+// `group` splits the offering into "برامج / Programs" and "دورات / Courses"
+// as shown in the Courses section.
 export const COURSES = [
-  { key: "tajweed", en: "Tajweed", ar: "التجويد", icon: "BookOpenCheck", leveled: true },
-  { key: "hifz-quran", en: "Hifz ul Qur'an", ar: "حفظ القرآن", icon: "BookMarked", leveled: false },
-  { key: "understanding-quran", en: "Understanding Qur'an", ar: "فهم القرآن", icon: "GraduationCap", leveled: false },
-  { key: "hifz-ahadees", en: "Hifz ul Ahadees", ar: "حفظ الأحاديث", icon: "ScrollText", leveled: false },
-  { key: "hifz-mutun", en: "Hifz Mutun", ar: "حفظ المتون", icon: "Library", leveled: false },
-  { key: "aqeedah", en: "Aqeedah", ar: "العقيدة", icon: "Sparkles", leveled: false },
-  { key: "sharh-mutun", en: "Explanation of Mutun", ar: "شرح المتون", icon: "PenLine", leveled: false },
+  { key: "tajweed", en: "Tajweed", ar: "التجويد", icon: "BookOpenCheck", leveled: true, group: "program" },
+  { key: "hifz-quran", en: "Hifz ul Qur'an", ar: "حفظ القرآن", icon: "BookMarked", leveled: false, group: "program" },
+  { key: "understanding-quran", en: "Understanding Qur'an", ar: "فهم القرآن", icon: "GraduationCap", leveled: false, group: "program" },
+  { key: "arabic-institute", en: "Arabic Language Institute", ar: "معهد اللغة العربية", icon: "Languages", leveled: false, group: "program" },
+  { key: "hifz-ahadees", en: "Hifz ul Ahadees", ar: "حفظ الأحاديث", icon: "ScrollText", leveled: false, group: "course" },
+  { key: "hifz-mutun", en: "Hifz Mutun", ar: "حفظ المتون", icon: "Library", leveled: false, group: "course" },
+  { key: "aqeedah", en: "Aqeedah", ar: "العقيدة", icon: "Sparkles", leveled: false, group: "course" },
+  { key: "sharh-mutun", en: "Explanation of Mutun", ar: "شرح المتون", icon: "PenLine", leveled: false, group: "course" },
+  { key: "fiqh", en: "Fiqh", ar: "الفقه", icon: "Scale", leveled: false, group: "course" },
+  { key: "comprehensive", en: "Al-Maktaba Al-Shamela", ar: "دورة المكتبة الشاملة", icon: "Layers", leveled: false, group: "course" },
+  { key: "tilawah", en: "Tilawah", ar: "التلاوة", icon: "Mic", leveled: false, group: "course" },
 ] as const;
 
+// The 30 juz' of the Qur'an — shown as a calendar-style picker when a student
+// chooses Hifz ul Qur'an.
+export const QURAN_JUZ = Array.from({ length: 30 }, (_, i) => i + 1);
+
+// WhatsApp group shown to applicants after a successful registration.
+// Override with NEXT_PUBLIC_WHATSAPP_GROUP_URL if the group link changes.
+export const WHATSAPP_GROUP_URL =
+  process.env.NEXT_PUBLIC_WHATSAPP_GROUP_URL ||
+  "https://chat.whatsapp.com/HhP7hjGGVy9FHfd9DqtWsp?s=cl&p=a&mlu=4&ilr=4";
+
 export const COURSE_KEYS = COURSES.map((c) => c.key);
+
+// The Programs list shown in the footer/menu — kept to these four only.
+// Bilingual: English labels in EN mode, Arabic labels in AR mode.
+export const PROGRAMS = [
+  { key: "tajweed", en: "Tajweed", ar: "التجويد" },
+  { key: "hifz-quran", en: "Quran Memorization", ar: "حفظ القرآن" },
+  { key: "tadabbur", en: "Quran Reflection", ar: "تدبر القرآن" },
+  { key: "tilawah", en: "Quran Recitation", ar: "التلاوة" },
+] as const;
 
 export const TAJWEED_LEVELS = [
   { key: "basic", en: "Basic", ar: "المبتدئ" },
@@ -69,8 +94,10 @@ export const TAUGHT_LEVELS = [
 // Instructors teach a narrower course set per the blueprint.
 export const INSTRUCTOR_COURSES = [
   { key: "tajweed", en: "Tajweed", ar: "التجويد", leveled: true },
-  { key: "hifz-quran", en: "Hifz ul Qur'an", ar: "حفظ القرآن", leveled: false },
-  { key: "hifz-hadith", en: "Hifz ul Hadith", ar: "حفظ الحديث", leveled: false },
+  { key: "tilawah", en: "Quran Recitation", ar: "تلاوة القرآن", leveled: false },
+  { key: "tadabbur", en: "Quran Reflection", ar: "تدبر القرآن", leveled: false },
+  { key: "hifz-quran", en: "Quran Memorization", ar: "حفظ القرآن", leveled: false },
+  { key: "arabic", en: "Arabic Language", ar: "اللغة العربية", leveled: false },
 ] as const;
 
 export const EXPERIENCE_YEARS = [
@@ -96,19 +123,9 @@ export const ACADEMIC_LEVELS = [
   { key: "other", en: "Other", ar: "أخرى" },
 ] as const;
 
-// Teachers — ONLY the names provided in the brief. Shown in English (romanised)
-// in English mode and in Arabic in Arabic mode. No other details are invented.
-export const TEACHERS = [
-  { en: "Iram Naz", ar: "إرم ناز" },
-  { en: "Salma Bibi", ar: "سلمة بي بي" },
-  { en: "Namira Sultana", ar: "نمرة سلطانة" },
-  { en: "Sakina", ar: "سكينة" },
-  { en: "Fizza", ar: "فضة" },
-  { en: "Umm Ayman", ar: "أم أيمن" },
-  { en: "Kanz ul Iman", ar: "كنز الإيمان" },
-  { en: "Hajar", ar: "هاجر" },
-  { en: "Anam Zaidi", ar: "أنعم زيدي" },
-] as const;
+// Teachers are managed from the admin panel and stored in the database.
+// The public Teachers section loads them from /api/teachers (approved
+// instructor records), so nothing is shown until an admin adds a teacher.
 
 // Upload constraints
 export const ACCEPTED_MIME = [

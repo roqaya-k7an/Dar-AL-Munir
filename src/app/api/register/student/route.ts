@@ -34,15 +34,10 @@ export async function POST(req: Request) {
   }
   const v = parsed.data;
 
-  // Prevent duplicate registrations (email / phone / registration number).
+  // A student may register for several different courses, but not the SAME
+  // course twice. Block only a duplicate (registration number + course).
   const dup = await prisma.studentApplication.findFirst({
-    where: {
-      OR: [
-        { email: v.email },
-        { phone: v.phone },
-        { registrationNo: v.registrationNo },
-      ],
-    },
+    where: { registrationNo: v.registrationNo, course: v.course },
     select: { id: true },
   });
   if (dup) return fail("DUPLICATE", 409);
@@ -62,14 +57,15 @@ export async function POST(req: Request) {
         phone: v.phone,
         fatherPhone: v.fatherPhone || null,
         nationality: sanitizeText(v.nationality),
-        nationalId: sanitizeText(v.nationalId),
         registrationNo: sanitizeText(v.registrationNo),
         universityId: v.universityId ? sanitizeText(v.universityId) : null,
         department: v.department ? sanitizeText(v.department) : null,
         specialization: v.specialization ? sanitizeText(v.specialization) : null,
         academicLevel: v.academicLevel || null,
         course: v.course,
+        courseId: v.courseId || null,
         courseLevel: v.courseLevel || null,
+        quranParts: v.quranParts || null,
         studiedBefore: v.studiedBefore,
         completedLevel: v.completedLevel || null,
         instituteName: v.instituteName ? sanitizeText(v.instituteName) : null,

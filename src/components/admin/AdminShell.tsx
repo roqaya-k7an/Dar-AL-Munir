@@ -7,8 +7,10 @@ import {
   LayoutDashboard,
   GraduationCap,
   Users,
-  UserPlus,
   Megaphone,
+  BookOpen,
+  ClipboardCheck,
+  Image as ImageIcon,
   Mail,
   LogOut,
   Moon,
@@ -24,8 +26,10 @@ const nav = [
   { href: "/admin/dashboard", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/students", label: "Students", icon: GraduationCap },
   { href: "/admin/instructors", label: "Teachers", icon: Users },
-  { href: "/admin/visiting", label: "Visiting Teachers", icon: UserPlus },
+  { href: "/admin/courses", label: "Courses", icon: BookOpen },
+  { href: "/admin/registration", label: "Registration", icon: ClipboardCheck },
   { href: "/admin/announcements", label: "Announcements", icon: Megaphone },
+  { href: "/admin/gallery", label: "Gallery", icon: ImageIcon },
   { href: "/admin/messages", label: "Messages", icon: Mail },
 ];
 
@@ -80,7 +84,7 @@ export function AdminShell({
             <DarLogo className="h-8 w-8" />
           </div>
           <div>
-            <p className="font-display text-lg leading-none">Dar Muneerah</p>
+            <p className="font-display text-lg leading-none">Dar Munira</p>
             <p className="text-xs text-white/50">Admin Console</p>
           </div>
         </div>

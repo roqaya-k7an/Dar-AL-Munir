@@ -3,7 +3,7 @@
 import { Facebook, Mail, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Official Dar Muneerah (IIUI) links — used as defaults so the icons always
+// Official Dar Munira (IIUI) links — used as defaults so the icons always
 // open the correct page even if the env vars are not set at build time.
 const fb =
   process.env.NEXT_PUBLIC_FACEBOOK_URL ||
@@ -11,7 +11,8 @@ const fb =
 const wa =
   process.env.NEXT_PUBLIC_WHATSAPP_URL ||
   "https://whatsapp.com/channel/0029Vb6TTGM1yT27mWXd5h1m";
-const email = process.env.NEXT_PUBLIC_CONTACT_EMAIL || "";
+const email =
+  process.env.NEXT_PUBLIC_CONTACT_EMAIL || "dar.muneera@iiu.edu.pk";
 
 export function SocialIcons({
   variant = "light",
